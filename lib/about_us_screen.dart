@@ -11,18 +11,42 @@ class AboutUsScreen extends StatefulWidget {
 }
 
 class _AboutUsScreenState extends State<AboutUsScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawer: AppUtils().drawer(context),
       body: Column(
         children: [
           Container(
             height: 120,
+            padding: const EdgeInsets.only(top: 30),
             width: MediaQuery.of(context).size.width,
             color: blueColor,
-            child: Center(
-              child: Text("About Us",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
+            child: Row(
+              children: [
+                GestureDetector(
+                    onTap: (){
+                      _scaffoldKey.currentState!.openDrawer();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 10,left: 30),
+                      height: 200,
+                      child: const Icon(
+                        Icons.list,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    )),
+                const Expanded(
+                  child: Center(
+                    child: Text("About Us",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
+                  ),
+                ),
+                Container(width: 80,)
+              ],
             ),
           ),
           Padding(
