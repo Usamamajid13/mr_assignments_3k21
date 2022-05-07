@@ -5,6 +5,7 @@ const normal = FontWeight.normal;
 const light = FontWeight.w500;
 
 const blueColor = Color(0xff1C25D5);
+const redColor = Color(0xffEC4D41);
 
 const splashRoute = "/";
 const homeScreenRoute = "/homeScreenRoute";

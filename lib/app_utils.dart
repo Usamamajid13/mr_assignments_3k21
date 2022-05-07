@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 
 class AppUtils{
+
   drawer(context){
     return Drawer(
       child: ListView(
@@ -54,6 +55,57 @@ class AppUtils{
           ),
         ],
       ),
+    );
+  }
+
+  textField({title,icon,hintText,controller}){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title,style: const TextStyle(color: Colors.black,fontSize: 16),),
+        const SizedBox(height: 10,),
+        SizedBox(
+          height: 50,
+          child: TextField(
+            controller: controller,
+            keyboardType: TextInputType.text,
+            style: const TextStyle(fontSize: 14, color: Colors.black),
+            decoration: InputDecoration(
+              prefixIcon: Icon(icon),
+              filled: true,
+              hintText: hintText,
+              hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
+              contentPadding:
+              const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+              border:  const OutlineInputBorder(
+                borderSide: BorderSide(color: redColor, width: 1.0),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              focusedBorder:  const OutlineInputBorder(
+                borderSide: BorderSide(color: redColor, width: 1.0),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              errorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: redColor, width: 1.0),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ) ,
+              enabledBorder:  const OutlineInputBorder(
+                borderSide: BorderSide(color: redColor, width: 1.0),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  myRadioButton({title, required int value, onChanged, groupValue}) {
+    return RadioListTile(
+      activeColor: redColor,
+      value: value,
+      groupValue: groupValue,
+      onChanged: onChanged,
+      title: Text(title),
     );
   }
 }
