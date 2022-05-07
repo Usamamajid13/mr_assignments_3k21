@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       padding: const EdgeInsets.only(top: 40, right: 10,left: 30),
                       height: 200,
-                      child: Icon(
+                      child: const Icon(
                         Icons.list,
                         color: Colors.white,
                         size: 30,
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-               Container(
+               const SizedBox(
                  width: 80,
                  height: 20,
                )

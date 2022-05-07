@@ -57,17 +57,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                   height: 20,
                 ),
                 const Text(
-                  "YOUR SATISFACTION & SUCCESS IS OUR RESPONSIBILITY",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
                   "Hello, and welcome to Mr. Assignments 3k21. Mr. Assignments is a service-oriented company designed to help busy and working-class students. We specialize in the academic field of writing. We help alleviate the tension, stress, anxiety and concerns our student-clients may have over their academic writing obligations.",
                   style: TextStyle(
                     fontSize: 15,
