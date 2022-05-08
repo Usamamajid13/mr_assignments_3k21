@@ -177,6 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               iNeedSomethingElse = true;
                               yes = false;
                             } else if (newValue == "No") {
+                              _groupValue = -1;
                               no = true;
                               iNeedSomethingElse = false;
                               yes = false;
@@ -600,84 +601,82 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 10,
                   ),
                   Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Special Notes or Details",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              height: 250,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: redColor,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: TextField(
-                                controller: notesController,
-                                keyboardType: TextInputType.text,
-                                style: const TextStyle(
-                                    fontSize: 14, color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0.0, horizontal: 20.0),
-                                ),
-                              ),
-                            ),
-                          ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Special Notes or Details",
+                          style: TextStyle(color: Colors.black, fontSize: 16),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 250,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: redColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: TextField(
+                          controller: notesController,
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 0.0, horizontal: 20.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
                   Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "File Upload (Articles, Instructions, Syllabus, etc)",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              height: 250,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: redColor,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: TextField(
-                                controller: notesController,
-                                keyboardType: TextInputType.text,
-                                style: const TextStyle(
-                                    fontSize: 14, color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0.0, horizontal: 20.0),
-                                ),
-                              ),
-                            ),
-                          ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "File Upload (Articles, Instructions, Syllabus, etc)",
+                          style: TextStyle(color: Colors.black, fontSize: 16),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 250,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: redColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: TextField(
+                          controller: notesController,
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 0.0, horizontal: 20.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -690,27 +689,47 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (emailController.text.isEmpty ||
                             emailController.text == "") {
                           EasyLoading.showError("Email is Required!");
-                        }
-
-
-
-
-
-
-
-
-
-
-
-
-                        else {
+                        } else {
                           if (dropdownvalue.toString() == "No") {
-                            if(dropdownvalue2.toString() == "Yes")
-                              {
+                            EasyLoading.showSuccess("Done");
+                          } else if(dropdownvalue.toString() == "No, I need something else"){
+                            if(_groupValue == -1){
+                              EasyLoading.showError("Please select what the project is relateed to?");
+                            }else{
+                              if(_groupValue1 == -1)
+                                {
+                                  EasyLoading.showError("Please select Business/Professional Need");
+                                }else{
                                 EasyLoading.showSuccess("Done");
                               }
-                          } else {
-                            print("pending");
+                            }
+                          }else{
+                            if(courseController.text.isEmpty ||
+                                courseController.text == "")
+                              {
+                                EasyLoading.showError("Class or Course Distinction is Required!");
+                              }
+                            else{
+                              if(_groupValue2 == -1)
+                                {
+                                  EasyLoading.showError("Please select Experience");
+                                }
+                              else{
+                                if(_groupValue3 == -1)
+                                  {
+                                    EasyLoading.showError("Please select Required Format Type");
+                                  }
+                                else{
+                                  if(_groupValue4 == -1)
+                                    {
+                                      EasyLoading.showError("Please select Required Line Spacing");
+                                    }
+                                  else{
+                                    EasyLoading.showSuccess("Done");
+                                  }
+                                }
+                              }
+                            }
                           }
                         }
                       }
