@@ -66,7 +66,7 @@ class AppUtils{
         const SizedBox(height: 10,),
         SizedBox(
           height: 50,
-          child: TextField(
+          child: TextFormField(
             controller: controller,
             keyboardType: TextInputType.text,
             style: const TextStyle(fontSize: 14, color: Colors.black),

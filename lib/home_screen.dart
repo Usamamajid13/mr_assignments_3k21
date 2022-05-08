@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mr_assignments_3k21/app_utils.dart';
 import 'package:mr_assignments_3k21/constants.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  GlobalKey<FormState> globalFomKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var nameController = TextEditingController();
   var emailController = TextEditingController();
@@ -27,7 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
   var items1 = ["No", "Yes"];
   var items2 = ["Within 24 hours", "Within 48 hours", "Within five days"];
   var items3 = ["Essay", "Summary", "Research"];
-  var items4 = ["less than 300 words","less than 500 words","less than 1000 words","less than 1500 words", "more than 1500 words"];
+  var items4 = [
+    "less than 300 words",
+    "less than 500 words",
+    "less than 1000 words",
+    "less than 1500 words",
+    "more than 1500 words"
+  ];
   int _groupValue = -1;
   int _groupValue1 = -1;
   int _groupValue2 = -1;
@@ -129,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   AppUtils().textField(
                       hintText: "",
                       controller: emailController,
-                       title: "Email"),
+                      title: "Email"),
                   const SizedBox(
                     height: 10,
                   ),
@@ -165,11 +176,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               no = false;
                               iNeedSomethingElse = true;
                               yes = false;
-                            } else if(newValue == "No"){
+                            } else if (newValue == "No") {
                               no = true;
                               iNeedSomethingElse = false;
                               yes = false;
-                            }else{
+                            } else {
                               no = false;
                               iNeedSomethingElse = false;
                               yes = true;
@@ -180,220 +191,239 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  yes == true?Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      AppUtils().textField(
-                          hintText: "example: ENC 1101",
-                          controller: courseController,
-                          title: "Class or Course Distinction"),
-                      Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "College/University Experience",
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 16),
+                  yes == true
+                      ? Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: AppUtils().myRadioButton(
-                                value: 0,
-                                title: "First Year Student",
-                                onChanged: (newValue) =>
-                                    setState(() => _groupValue2 = newValue),
-                                groupValue: _groupValue2),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: AppUtils().myRadioButton(
-                                value: 1,
-                                title: "2nd - 4th Year Student",
-                                onChanged: (newValue) =>
-                                    setState(() => _groupValue2 = newValue),
-                                groupValue: _groupValue2),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: AppUtils().myRadioButton(
-                                value: 2,
-                                title: "4+ Year Student",
-                                onChanged: (newValue) =>
-                                    setState(() => _groupValue2 = newValue),
-                                groupValue: _groupValue2),
-                          ),
-                          const SizedBox(height: 10,),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Data Needed for?",
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 16),
-                            ),
-                          ),
-                          const SizedBox(height: 10,),
-                          Container(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: redColor, width: 1),
-                                borderRadius: BorderRadius.circular(15)),
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                isExpanded: true,
-                                value: dropdownvalue4,
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                items: items3.map((String items) {
-                                  return DropdownMenuItem(
-                                    value: items,
-                                    child: Text(items),
-                                  );
-                                }).toList(),
-                                onChanged: (var newValue) {
-                                  setState(() {
-                                    dropdownvalue4 = newValue.toString();
-
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10,),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Project Length?",
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 16),
-                            ),
-                          ),
-                          const SizedBox(height: 10,),
-                          Container(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: redColor, width: 1),
-                                borderRadius: BorderRadius.circular(15)),
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                isExpanded: true,
-                                value: dropdownvalue5,
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                items: items4.map((String items) {
-                                  return DropdownMenuItem(
-                                    value: items,
-                                    child: Text(items),
-                                  );
-                                }).toList(),
-                                onChanged: (var newValue) {
-                                  setState(() {
-                                    dropdownvalue5 = newValue.toString();
-
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10,),
-                          Column(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Required Format Type?",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                            AppUtils().textField(
+                                hintText: "example: ENC 1101",
+                                controller: courseController,
+                                title: "Class or Course Distinction"),
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: AppUtils().myRadioButton(
-                                    value: 0,
-                                    title: "APA (with citations)",
-                                    onChanged: (newValue) =>
-                                        setState(() => _groupValue3 = newValue),
-                                    groupValue: _groupValue3),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: AppUtils().myRadioButton(
-                                    value: 1,
-                                    title: "CMS (with citations)",
-                                    onChanged: (newValue) =>
-                                        setState(() => _groupValue3 = newValue),
-                                    groupValue: _groupValue3),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: AppUtils().myRadioButton(
-                                    value: 2,
-                                    title: "MLA (with citations)",
-                                    onChanged: (newValue) =>
-                                        setState(() => _groupValue3 = newValue),
-                                    groupValue: _groupValue3),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10,),
-
-                          Column(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "What Is The Required Line Spacing?",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "College/University Experience",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 16),
+                                  ),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: AppUtils().myRadioButton(
-                                    value: 0,
-                                    title: "Single",
-                                    onChanged: (newValue) =>
-                                        setState(() => _groupValue4 = newValue),
-                                    groupValue: _groupValue4),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: AppUtils().myRadioButton(
-                                    value: 1,
-                                    title: "Double",
-                                    onChanged: (newValue) =>
-                                        setState(() => _groupValue4 = newValue),
-                                    groupValue: _groupValue4),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: AppUtils().myRadioButton(
-                                    value: 2,
-                                    title: "Not Specified",
-                                    onChanged: (newValue) =>
-                                        setState(() => _groupValue4 = newValue),
-                                    groupValue: _groupValue4),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
-                  ):Container(),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AppUtils().myRadioButton(
+                                      value: 0,
+                                      title: "First Year Student",
+                                      onChanged: (newValue) => setState(
+                                          () => _groupValue2 = newValue),
+                                      groupValue: _groupValue2),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AppUtils().myRadioButton(
+                                      value: 1,
+                                      title: "2nd - 4th Year Student",
+                                      onChanged: (newValue) => setState(
+                                          () => _groupValue2 = newValue),
+                                      groupValue: _groupValue2),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AppUtils().myRadioButton(
+                                      value: 2,
+                                      title: "4+ Year Student",
+                                      onChanged: (newValue) => setState(
+                                          () => _groupValue2 = newValue),
+                                      groupValue: _groupValue2),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Data Needed for?",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 16),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  height: 50,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: redColor, width: 1),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      value: dropdownvalue4,
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      items: items3.map((String items) {
+                                        return DropdownMenuItem(
+                                          value: items,
+                                          child: Text(items),
+                                        );
+                                      }).toList(),
+                                      onChanged: (var newValue) {
+                                        setState(() {
+                                          dropdownvalue4 = newValue.toString();
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Project Length?",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 16),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  height: 50,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: redColor, width: 1),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      value: dropdownvalue5,
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      items: items4.map((String items) {
+                                        return DropdownMenuItem(
+                                          value: items,
+                                          child: Text(items),
+                                        );
+                                      }).toList(),
+                                      onChanged: (var newValue) {
+                                        setState(() {
+                                          dropdownvalue5 = newValue.toString();
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    const Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Required Format Type?",
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: AppUtils().myRadioButton(
+                                          value: 0,
+                                          title: "APA (with citations)",
+                                          onChanged: (newValue) => setState(
+                                              () => _groupValue3 = newValue),
+                                          groupValue: _groupValue3),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: AppUtils().myRadioButton(
+                                          value: 1,
+                                          title: "CMS (with citations)",
+                                          onChanged: (newValue) => setState(
+                                              () => _groupValue3 = newValue),
+                                          groupValue: _groupValue3),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: AppUtils().myRadioButton(
+                                          value: 2,
+                                          title: "MLA (with citations)",
+                                          onChanged: (newValue) => setState(
+                                              () => _groupValue3 = newValue),
+                                          groupValue: _groupValue3),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    const Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "What Is The Required Line Spacing?",
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: AppUtils().myRadioButton(
+                                          value: 0,
+                                          title: "Single",
+                                          onChanged: (newValue) => setState(
+                                              () => _groupValue4 = newValue),
+                                          groupValue: _groupValue4),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: AppUtils().myRadioButton(
+                                          value: 1,
+                                          title: "Double",
+                                          onChanged: (newValue) => setState(
+                                              () => _groupValue4 = newValue),
+                                          groupValue: _groupValue4),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: AppUtils().myRadioButton(
+                                          value: 2,
+                                          title: "Not Specified",
+                                          onChanged: (newValue) => setState(
+                                              () => _groupValue4 = newValue),
+                                          groupValue: _groupValue4),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      : Container(),
                   iNeedSomethingElse == true
                       ? Column(
                           children: [
@@ -569,84 +599,138 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  no == true ? Container():Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Special Notes or Details",
-                          style: TextStyle(color: Colors.black, fontSize: 16),
+                  Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Special Notes or Details",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 250,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: redColor,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: TextField(
+                                controller: notesController,
+                                keyboardType: TextInputType.text,
+                                style: const TextStyle(
+                                    fontSize: 14, color: Colors.black),
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 0.0, horizontal: 20.0),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 10,),
-                      Container(
-                        height: 250,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: redColor,
-                            width: 1,
-                          ),borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          controller: notesController,
-                          keyboardType: TextInputType.text,
-                          style: const TextStyle(
-                              fontSize: 14, color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                             contentPadding: EdgeInsets.symmetric(
-                                vertical: 0.0, horizontal: 20.0),
-                          ),
-                        ),
-                      ),
-                    ],
+                  const SizedBox(
+                    height: 10,
                   ),
-                  const SizedBox(height: 10,),
-                  no == true ? Container():Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "File Upload (Articles, Instructions, Syllabus, etc)",
-                          style: TextStyle(color: Colors.black, fontSize: 16),
+                  Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "File Upload (Articles, Instructions, Syllabus, etc)",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 250,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: redColor,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: TextField(
+                                controller: notesController,
+                                keyboardType: TextInputType.text,
+                                style: const TextStyle(
+                                    fontSize: 14, color: Colors.black),
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 0.0, horizontal: 20.0),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 10,),
-                      Container(
-                        height: 250,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: redColor,
-                            width: 1,
-                          ),borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          controller: notesController,
-                          keyboardType: TextInputType.text,
-                          style: const TextStyle(
-                              fontSize: 14, color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                             contentPadding: EdgeInsets.symmetric(
-                                vertical: 0.0, horizontal: 20.0),
-                          ),
-                        ),
-                      ),
-                    ],
+                  const SizedBox(
+                    height: 10,
                   ),
-                  const SizedBox(height: 10,),
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width*0.9,
-                    decoration: BoxDecoration(
-                      color: redColor,
-                      borderRadius: BorderRadius.circular(15),
+                  GestureDetector(
+                    onTap: () {
+                      if (nameController.text.isEmpty ||
+                          nameController.text == "") {
+                        EasyLoading.showError("Name is Required!");
+                      } else {
+                        if (emailController.text.isEmpty ||
+                            emailController.text == "") {
+                          EasyLoading.showError("Email is Required!");
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+                        else {
+                          if (dropdownvalue.toString() == "No") {
+                            if(dropdownvalue2.toString() == "Yes")
+                              {
+                                EasyLoading.showSuccess("Done");
+                              }
+                          } else {
+                            print("pending");
+                          }
+                        }
+                      }
+                    },
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                        color: redColor,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: const Center(
+                          child: Text(
+                        "Submit",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      )),
                     ),
-                    child: const Center(child: Text("Submit",style: TextStyle(color: Colors.white,fontSize: 16,),)),
                   ),
                   const SizedBox(
                     height: 210,
@@ -659,4 +743,42 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Future sendEmail({
+    required String name,
+    required String email,
+    required String subject,
+    required String message,
+  }) async {
+    final serviceId = 'service_xi42usb';
+    final templateId = 'template_xpzp6vf';
+    final userId = 'QwSXqLvcMvYbBfmEI';
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'service_id': serviceId,
+          'template_id': templateId,
+          'user_id': userId,
+          'template_params': {
+            'user_name': name,
+            'user_email': email,
+            'user_subject': subject,
+            'user_message': message,
+          }
+        }));
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode == 200) {
+      EasyLoading.showSuccess("Email sent Successfully!");
+    }
+  }
 }
+// sendEmail(
+//     email: 'Usamamajid13@gmail.com',
+//     name: nameController.text,
+//     subject: "Hello",
+//     message:
+//     "Hello this is the test from ${emailController.text}");

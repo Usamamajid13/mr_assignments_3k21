@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'about_us_screen.dart';
 import 'constants.dart';
 import 'home_screen.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       statusBarColor: blueColor, // status bar color
     ));
     return MaterialApp(
+      builder: EasyLoading.init(),
       title: 'Mr. Assignments 3K21',
       debugShowCheckedModeBanner: false,
       initialRoute: splashRoute,
