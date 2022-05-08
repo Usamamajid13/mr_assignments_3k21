@@ -12,16 +12,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var nameController = TextEditingController();
+  var emailController = TextEditingController();
   var notesController = TextEditingController();
+  var courseController = TextEditingController();
   String dropdownvalue = 'No';
   String dropdownvalue2 = 'No';
   String dropdownvalue3 = 'Within five days';
+  String dropdownvalue4 = 'Essay';
+  String dropdownvalue5 = 'less than 300 words';
   bool iNeedSomethingElse = false;
+  bool no = false;
+  bool yes = false;
   var items = ["No", "No, I need something else", "Yes"];
   var items1 = ["No", "Yes"];
   var items2 = ["Within 24 hours", "Within 48 hours", "Within five days"];
+  var items3 = ["Essay", "Summary", "Research"];
+  var items4 = ["less than 300 words","less than 500 words","less than 1000 words","less than 1500 words", "more than 1500 words"];
   int _groupValue = -1;
   int _groupValue1 = -1;
+  int _groupValue2 = -1;
+  int _groupValue3 = -1;
+  int _groupValue4 = -1;
   bool needIn8 = false;
 
   @override
@@ -108,15 +119,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   AppUtils().textField(
-                      hintText: "Boss Jack",
+                      hintText: "First name only",
                       controller: nameController,
                       icon: Icons.account_box,
-                      title: "First name only"),
+                      title: "Name"),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  AppUtils().textField(
+                      hintText: "",
+                      controller: emailController,
+                       title: "Email"),
                   const SizedBox(
                     height: 10,
                   ),
                   const Text(
-                    "Do you need assistance with an academic assignment?",
+                    "Do you need research or data for an academic project?",
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                   const SizedBox(
@@ -144,9 +162,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {
                             dropdownvalue = newValue.toString();
                             if (newValue == "No, I need something else") {
+                              no = false;
                               iNeedSomethingElse = true;
-                            } else {
+                              yes = false;
+                            } else if(newValue == "No"){
+                              no = true;
                               iNeedSomethingElse = false;
+                              yes = false;
+                            }else{
+                              no = false;
+                              iNeedSomethingElse = false;
+                              yes = true;
                               _groupValue = -1;
                             }
                           });
@@ -154,6 +180,220 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  yes == true?Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      AppUtils().textField(
+                          hintText: "example: ENC 1101",
+                          controller: courseController,
+                          title: "Class or Course Distinction"),
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "College/University Experience",
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 16),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: AppUtils().myRadioButton(
+                                value: 0,
+                                title: "First Year Student",
+                                onChanged: (newValue) =>
+                                    setState(() => _groupValue2 = newValue),
+                                groupValue: _groupValue2),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: AppUtils().myRadioButton(
+                                value: 1,
+                                title: "2nd - 4th Year Student",
+                                onChanged: (newValue) =>
+                                    setState(() => _groupValue2 = newValue),
+                                groupValue: _groupValue2),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: AppUtils().myRadioButton(
+                                value: 2,
+                                title: "4+ Year Student",
+                                onChanged: (newValue) =>
+                                    setState(() => _groupValue2 = newValue),
+                                groupValue: _groupValue2),
+                          ),
+                          const SizedBox(height: 10,),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Data Needed for?",
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 16),
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: redColor, width: 1),
+                                borderRadius: BorderRadius.circular(15)),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: dropdownvalue4,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                items: items3.map((String items) {
+                                  return DropdownMenuItem(
+                                    value: items,
+                                    child: Text(items),
+                                  );
+                                }).toList(),
+                                onChanged: (var newValue) {
+                                  setState(() {
+                                    dropdownvalue4 = newValue.toString();
+
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Project Length?",
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 16),
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: redColor, width: 1),
+                                borderRadius: BorderRadius.circular(15)),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: dropdownvalue5,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                items: items4.map((String items) {
+                                  return DropdownMenuItem(
+                                    value: items,
+                                    child: Text(items),
+                                  );
+                                }).toList(),
+                                onChanged: (var newValue) {
+                                  setState(() {
+                                    dropdownvalue5 = newValue.toString();
+
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Required Format Type?",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: AppUtils().myRadioButton(
+                                    value: 0,
+                                    title: "APA (with citations)",
+                                    onChanged: (newValue) =>
+                                        setState(() => _groupValue3 = newValue),
+                                    groupValue: _groupValue3),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: AppUtils().myRadioButton(
+                                    value: 1,
+                                    title: "CMS (with citations)",
+                                    onChanged: (newValue) =>
+                                        setState(() => _groupValue3 = newValue),
+                                    groupValue: _groupValue3),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: AppUtils().myRadioButton(
+                                    value: 2,
+                                    title: "MLA (with citations)",
+                                    onChanged: (newValue) =>
+                                        setState(() => _groupValue3 = newValue),
+                                    groupValue: _groupValue3),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10,),
+
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "What Is The Required Line Spacing?",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: AppUtils().myRadioButton(
+                                    value: 0,
+                                    title: "Single",
+                                    onChanged: (newValue) =>
+                                        setState(() => _groupValue4 = newValue),
+                                    groupValue: _groupValue4),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: AppUtils().myRadioButton(
+                                    value: 1,
+                                    title: "Double",
+                                    onChanged: (newValue) =>
+                                        setState(() => _groupValue4 = newValue),
+                                    groupValue: _groupValue4),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: AppUtils().myRadioButton(
+                                    value: 2,
+                                    title: "Not Specified",
+                                    onChanged: (newValue) =>
+                                        setState(() => _groupValue4 = newValue),
+                                    groupValue: _groupValue4),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ):Container(),
                   iNeedSomethingElse == true
                       ? Column(
                           children: [
@@ -163,7 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             const Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "Assignment Relation",
+                                "Project is related to",
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
@@ -198,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             const Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "Multiple Choice",
+                                "Business/Professional Need",
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
@@ -318,8 +558,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onChanged: (var newValue) {
                                     setState(() {
                                       dropdownvalue3 = newValue.toString();
-                                      if (newValue == "Yes") {
-                                      } else {}
                                     });
                                   },
                                 ),
@@ -331,17 +569,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Special Notes or Details",
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                    ),
-                  ),
-                  const SizedBox(height: 10,),
-                  Column(
+                  no == true ? Container():Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Special Notes or Details",
+                          style: TextStyle(color: Colors.black, fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
                       Container(
                         height: 250,
                         width: MediaQuery.of(context).size.width * 0.9,
@@ -351,21 +589,64 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 1,
                           ),borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Expanded(
-                          child: TextField(
-                            controller: notesController,
-                            keyboardType: TextInputType.text,
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.black),
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0.0, horizontal: 20.0),
-                            ),
+                        child: TextField(
+                          controller: notesController,
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                             contentPadding: EdgeInsets.symmetric(
+                                vertical: 0.0, horizontal: 20.0),
                           ),
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 10,),
+                  no == true ? Container():Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "File Upload (Articles, Instructions, Syllabus, etc)",
+                          style: TextStyle(color: Colors.black, fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      Container(
+                        height: 250,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: redColor,
+                            width: 1,
+                          ),borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: TextField(
+                          controller: notesController,
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                             contentPadding: EdgeInsets.symmetric(
+                                vertical: 0.0, horizontal: 20.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width*0.9,
+                    decoration: BoxDecoration(
+                      color: redColor,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Center(child: Text("Submit",style: TextStyle(color: Colors.white,fontSize: 16,),)),
                   ),
                   const SizedBox(
                     height: 210,
