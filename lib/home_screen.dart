@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mr_assignments_3k21/app_utils.dart';
@@ -691,40 +690,41 @@ class _HomeScreenState extends State<HomeScreen> {
                           EasyLoading.showError("Email is Required!");
                         } else {
                           if (dropdownvalue.toString() == "No") {
-                            EasyLoading.showSuccess("Done");
-                          } else if(dropdownvalue.toString() == "No, I need something else"){
-                            if(_groupValue == -1){
-                              EasyLoading.showError("Please select what the project is relateed to?");
-                            }else{
-                              if(_groupValue1 == -1)
-                                {
-                                  EasyLoading.showError("Please select Business/Professional Need");
-                                }else{
+                            sendEmail(
+                                message:  "Hello, this is an email from ${emailController.text} sent by ${nameController.text}. Need research or data for an academic project: ${dropdownvalue.toString()}. Need this within 8 hours: ${dropdownvalue2.toString()}. Need this in: ${dropdownvalue3.toString()}. Special Notes: ${notesController.text}",
+                                name: nameController.text,
+                                email: emailController.text);
+                          } else if (dropdownvalue.toString() ==
+                              "No, I need something else") {
+                            if (_groupValue == -1) {
+                              EasyLoading.showError(
+                                  "Please select what the project is related to?");
+                            } else {
+                              if (_groupValue1 == -1) {
+                                EasyLoading.showError(
+                                    "Please select Business/Professional Need");
+                              } else {
                                 EasyLoading.showSuccess("Done");
                               }
                             }
-                          }else{
-                            if(courseController.text.isEmpty ||
-                                courseController.text == "")
-                              {
-                                EasyLoading.showError("Class or Course Distinction is Required!");
-                              }
-                            else{
-                              if(_groupValue2 == -1)
-                                {
-                                  EasyLoading.showError("Please select Experience");
-                                }
-                              else{
-                                if(_groupValue3 == -1)
-                                  {
-                                    EasyLoading.showError("Please select Required Format Type");
-                                  }
-                                else{
-                                  if(_groupValue4 == -1)
-                                    {
-                                      EasyLoading.showError("Please select Required Line Spacing");
-                                    }
-                                  else{
+                          } else {
+                            if (courseController.text.isEmpty ||
+                                courseController.text == "") {
+                              EasyLoading.showError(
+                                  "Class or Course Distinction is Required!");
+                            } else {
+                              if (_groupValue2 == -1) {
+                                EasyLoading.showError(
+                                    "Please select Experience");
+                              } else {
+                                if (_groupValue3 == -1) {
+                                  EasyLoading.showError(
+                                      "Please select Required Format Type");
+                                } else {
+                                  if (_groupValue4 == -1) {
+                                    EasyLoading.showError(
+                                        "Please select Required Line Spacing");
+                                  } else {
                                     EasyLoading.showSuccess("Done");
                                   }
                                 }
@@ -766,12 +766,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Future sendEmail({
     required String name,
     required String email,
-    required String subject,
     required String message,
+    relatedProject = "N/A",
+    needResearch = "N/A",
+    professionalNeeds = "N/A",
+    hours = "N/A",
+    classOrCourse = "N/A",
+    completionTime = "N/A",
+    experience = "N/A",
+    dataNeeded = "N/A",
+    requiredFormat = "N/A",
+    projectLength = "N/A",
+    lineSpacing = "N/A",
+    specialNotes = "N/A",
   }) async {
-    final serviceId = 'service_xi42usb';
-    final templateId = 'template_xpzp6vf';
-    final userId = 'QwSXqLvcMvYbBfmEI';
+    EasyLoading.show(status: "Loading..");
+    const serviceId = 'service_xi42usb';
+    const templateId = 'template_xpzp6vf';
+    const userId = 'QwSXqLvcMvYbBfmEI';
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
     final response = await http.post(url,
         headers: {
@@ -784,20 +796,27 @@ class _HomeScreenState extends State<HomeScreen> {
           'template_params': {
             'user_name': name,
             'user_email': email,
-            'user_subject': subject,
             'user_message': message,
+            'related_project': relatedProject,
+            'need_research':needResearch,
+            'professional_needs':professionalNeeds,
+            '8_hours': hours,
+            'completion_time': completionTime,
+            'class_or_course': classOrCourse,
+            'experience': experience,
+            'data_needed': dataNeeded,
+            'project_length':projectLength,
+            'required_format':requiredFormat,
+            'line_spacing':lineSpacing,
+            'special_notes':specialNotes,
+
           }
         }));
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200) {
       EasyLoading.showSuccess("Email sent Successfully!");
     }
+    else{
+      EasyLoading.dismiss();
+    }
   }
 }
-// sendEmail(
-//     email: 'Usamamajid13@gmail.com',
-//     name: nameController.text,
-//     subject: "Hello",
-//     message:
-//     "Hello this is the test from ${emailController.text}");
