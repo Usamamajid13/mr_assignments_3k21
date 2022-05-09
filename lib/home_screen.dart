@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var courseController = TextEditingController();
   String dropdownvalue = 'No';
   String dropdownvalue2 = 'No';
-  String dropdownvalue3 = 'Within five days';
+  String dropdownvalue3 = 'Within 24 hours';
   String dropdownvalue4 = 'Essay';
   String dropdownvalue5 = 'less than 300 words';
   bool iNeedSomethingElse = false;
@@ -691,9 +691,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         } else {
                           if (dropdownvalue.toString() == "No") {
                             sendEmail(
-                                message:  "Hello, this is an email from ${emailController.text} sent by ${nameController.text}. Need research or data for an academic project: ${dropdownvalue.toString()}. Need this within 8 hours: ${dropdownvalue2.toString()}. Need this in: ${dropdownvalue3.toString()}. Special Notes: ${notesController.text}",
+                              needResearch: dropdownvalue,
                                 name: nameController.text,
-                                email: emailController.text);
+                                email: emailController.text,
+                            specialNotes: notesController.text,
+                              hours: dropdownvalue2,
+                              completionTime: dropdownvalue3,
+
+                            );
                           } else if (dropdownvalue.toString() ==
                               "No, I need something else") {
                             if (_groupValue == -1) {
@@ -766,7 +771,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future sendEmail({
     required String name,
     required String email,
-    required String message,
     relatedProject = "N/A",
     needResearch = "N/A",
     professionalNeeds = "N/A",
@@ -796,7 +800,6 @@ class _HomeScreenState extends State<HomeScreen> {
           'template_params': {
             'user_name': name,
             'user_email': email,
-            'user_message': message,
             'related_project': relatedProject,
             'need_research':needResearch,
             'professional_needs':professionalNeeds,
