@@ -443,8 +443,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 0,
                                   title: "Business/Work",
-                                  onChanged: (newValue)
-                                  {
+                                  onChanged: (newValue) {
                                     print(newValue);
                                     setState(() {
                                       _groupValue = newValue;
@@ -457,8 +456,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 1,
                                   title: "Professional",
-                                  onChanged: (newValue)
-                                  {
+                                  onChanged: (newValue) {
                                     print(newValue);
                                     setState(() {
                                       _groupValue = newValue;
@@ -488,8 +486,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 0,
                                   title: "CV/Resume",
-                                  onChanged: (newValue)
-                                  {
+                                  onChanged: (newValue) {
                                     print(newValue);
                                     setState(() {
                                       _groupValue1 = newValue;
@@ -502,8 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 1,
                                   title: "Grant Writing",
-                                  onChanged: (newValue)
-                                  {
+                                  onChanged: (newValue) {
                                     print(newValue);
                                     setState(() {
                                       _groupValue1 = newValue;
@@ -516,8 +512,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 2,
                                   title: "Power Point",
-                                  onChanged: (newValue)
-                                  {
+                                  onChanged: (newValue) {
                                     print(newValue);
                                     setState(() {
                                       _groupValue1 = newValue;
@@ -717,9 +712,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (dropdownvalue.toString() == "No") {
                             sendEmail(
                               needResearch: dropdownvalue,
-                                name: nameController.text,
-                                email: emailController.text,
-                            specialNotes: notesController.text,
+                              name: nameController.text,
+                              email: emailController.text,
+                              specialNotes: notesController.text,
                               hours: dropdownvalue2,
                               completionTime: dropdownvalue3,
                             );
@@ -736,8 +731,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 sendEmail(
                                   needResearch: dropdownvalue,
                                   name: nameController.text,
-                                  relatedProject: _groupValue == 1 ? "Professional":"Business/Word",
-                                  professionalNeeds: _groupValue1 == 0 ? "CV/Resume": _groupValue1 == 1 ? "Grant Writing":"Power Point",
+                                  relatedProject: _groupValue == 1
+                                      ? "Professional"
+                                      : "Business/Word",
+                                  professionalNeeds: _groupValue1 == 0
+                                      ? "CV/Resume"
+                                      : _groupValue1 == 1
+                                          ? "Grant Writing"
+                                          : "Power Point",
                                   email: emailController.text,
                                   specialNotes: notesController.text,
                                   hours: dropdownvalue2,
@@ -764,12 +765,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                         "Please select Required Line Spacing");
                                   } else {
                                     sendEmail(
-                                       name: nameController.text,
-                                       email: emailController.text,
+                                      classOrCourse: courseController.text,
+                                      needResearch: dropdownvalue,
+                                      experience: _groupValue2 == 0
+                                          ? "First Year Student"
+                                          : _groupValue2 == 1
+                                              ? "2nd to 4th Year Student"
+                                              : "4+ Years Student",
+                                      dataNeeded: dropdownvalue4,
+                                      projectLength: dropdownvalue5,
+                                      requiredFormat: _groupValue3 == 0
+                                          ? "APA (with Citations)"
+                                          : _groupValue3 == 1
+                                              ? "CMS (with Citations)"
+                                              : "MLA (with Citations)",
+                                      name: nameController.text,
+                                      email: emailController.text,
+                                      lineSpacing: _groupValue4 == 0
+                                          ? "Single"
+                                          : _groupValue4 == 1
+                                              ? "Double"
+                                              : "Not Specified",
                                       specialNotes: notesController.text,
                                       hours: dropdownvalue2,
                                       completionTime: dropdownvalue3,
-                                    );                                  }
+                                    );
+                                  }
                                 }
                               }
                             }
@@ -839,24 +860,22 @@ class _HomeScreenState extends State<HomeScreen> {
             'user_name': name,
             'user_email': email,
             'related_project': relatedProject,
-            'need_research':needResearch,
-            'professional_needs':professionalNeeds,
+            'need_research': needResearch,
+            'professional_needs': professionalNeeds,
             '8_hours': hours,
             'completion_time': completionTime,
             'class_or_course': classOrCourse,
             'experience': experience,
             'data_needed': dataNeeded,
-            'project_length':projectLength,
-            'required_format':requiredFormat,
-            'line_spacing':lineSpacing,
-            'special_notes':specialNotes,
-
+            'project_length': projectLength,
+            'required_format': requiredFormat,
+            'line_spacing': lineSpacing,
+            'special_notes': specialNotes,
           }
         }));
     if (response.statusCode == 200) {
       EasyLoading.showSuccess("Email sent Successfully!");
-    }
-    else{
+    } else {
       EasyLoading.dismiss();
     }
   }
