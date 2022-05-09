@@ -1,9 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:path/path.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mr_assignments_3k21/app_utils.dart';
 import 'package:mr_assignments_3k21/constants.dart';
 import 'package:http/http.dart' as http;
+
+import 'firebase_api.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,7 +19,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  File? file;
   GlobalKey<FormState> globalFomKey = GlobalKey<FormState>();
+  UploadTask? task;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var nameController = TextEditingController();
   var emailController = TextEditingController();
@@ -47,6 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fileName = file != null ? basename(file!.path) : 'No File Selected';
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -672,27 +682,36 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        height: 250,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: redColor,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          controller: notesController,
-                          keyboardType: TextInputType.text,
-                          style: const TextStyle(
-                              fontSize: 14, color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 0.0, horizontal: 20.0),
-                          ),
-                        ),
+                      GestureDetector(
+                        onTap: (){
+                          selectFile();
+                        },
+                        child: Container(
+                            height: 250,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: redColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: task != null ? Center(child: buildUploadStatus(task!)) : Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.upload_file,
+                                  color: Colors.grey,
+                                  size: 50,
+                                ),
+                                SizedBox(height: 40,),
+                                Text(
+                                  "Upload Documents/File",
+                                  style: TextStyle(color: Colors.grey, fontSize: 20),
+                                ),
+                              ],
+                            ))),
                       ),
                     ],
                   ),
@@ -717,6 +736,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               specialNotes: notesController.text,
                               hours: dropdownvalue2,
                               completionTime: dropdownvalue3,
+                              fileLink: urlDownload ?? "N/A",
                             );
                           } else if (dropdownvalue.toString() ==
                               "No, I need something else") {
@@ -743,6 +763,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   specialNotes: notesController.text,
                                   hours: dropdownvalue2,
                                   completionTime: dropdownvalue3,
+                                  fileLink: urlDownload ?? "N/A",
                                 );
                               }
                             }
@@ -789,6 +810,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       specialNotes: notesController.text,
                                       hours: dropdownvalue2,
                                       completionTime: dropdownvalue3,
+                                      fileLink: urlDownload ?? "N/A",
                                     );
                                   }
                                 }
@@ -826,7 +848,32 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+  var urlDownload;
+  Future uploadFile() async {
+    if (file == null) return;
 
+    final fileName = basename(file!.path);
+    final destination = 'files/$fileName';
+
+    task = FirebaseApi.uploadFile(destination, file!);
+    setState(() {});
+
+    if (task == null) return;
+
+    final snapshot = await task!.whenComplete(() {});
+    urlDownload = await snapshot.ref.getDownloadURL();
+
+    print('Download-Link: $urlDownload');
+  }
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+    if (result == null) return;
+    final path = result.files.single.path!;
+
+    setState(() => file = File(path));
+  }
   Future sendEmail({
     required String name,
     required String email,
@@ -842,8 +889,10 @@ class _HomeScreenState extends State<HomeScreen> {
     projectLength = "N/A",
     lineSpacing = "N/A",
     specialNotes = "N/A",
+    fileLink = "N/A"
   }) async {
     EasyLoading.show(status: "Loading..");
+    uploadFile();
     const serviceId = 'service_xi42usb';
     const templateId = 'template_xpzp6vf';
     const userId = 'QwSXqLvcMvYbBfmEI';
@@ -871,12 +920,30 @@ class _HomeScreenState extends State<HomeScreen> {
             'required_format': requiredFormat,
             'line_spacing': lineSpacing,
             'special_notes': specialNotes,
+            'file_link':fileLink,
           }
         }));
     if (response.statusCode == 200) {
       EasyLoading.showSuccess("Email sent Successfully!");
     } else {
-      EasyLoading.dismiss();
+      EasyLoading.showError("Somethings went wrong!");
     }
   }
+  Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
+    stream: task.snapshotEvents,
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        final snap = snapshot.data!;
+        final progress = snap.bytesTransferred / snap.totalBytes;
+        final percentage = (progress * 100).toStringAsFixed(2);
+
+        return Text(
+          '$percentage %',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        );
+      } else {
+        return Container();
+      }
+    },
+  );
 }

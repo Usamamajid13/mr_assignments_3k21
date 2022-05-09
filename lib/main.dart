@@ -1,3 +1,5 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,7 +10,10 @@ import 'splash_screen.dart';
 import 'why_us_screen.dart';
 
 Future<void> main() async {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate();
+   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,8 +22,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: blueColor, // navigation bar color
-      statusBarColor: blueColor, // status bar color
+      systemNavigationBarColor: blueColor,
+      statusBarColor: blueColor,
     ));
     return MaterialApp(
       builder: EasyLoading.init(),

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "784591583451",
+    "firebase_url": "https://mrassignments3k21-b5075-default-rtdb.firebaseio.com",
+    "project_id": "mrassignments3k21-b5075",
+    "storage_bucket": "mrassignments3k21-b5075.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784591583451:android:d06deba74c197de059f4fe",
+        "android_client_info": {
+          "package_name": "com.Jack.MrAssignments3k21"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784591583451-indd6cfhiv5q6uk942gbhvp8jnfgkja1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB39wuBkqVv-G4M_m-JMX_k6oeoHrPoJag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784591583451-indd6cfhiv5q6uk942gbhvp8jnfgkja1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
