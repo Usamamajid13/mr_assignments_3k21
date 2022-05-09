@@ -443,8 +443,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 0,
                                   title: "Business/Work",
-                                  onChanged: (newValue) =>
-                                      setState(() => _groupValue = newValue),
+                                  onChanged: (newValue)
+                                  {
+                                    print(newValue);
+                                    setState(() {
+                                      _groupValue = newValue;
+                                    });
+                                  },
                                   groupValue: _groupValue),
                             ),
                             Align(
@@ -452,8 +457,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 1,
                                   title: "Professional",
-                                  onChanged: (newValue) =>
-                                      setState(() => _groupValue = newValue),
+                                  onChanged: (newValue)
+                                  {
+                                    print(newValue);
+                                    setState(() {
+                                      _groupValue = newValue;
+                                    });
+                                  },
                                   groupValue: _groupValue),
                             ),
                           ],
@@ -478,8 +488,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 0,
                                   title: "CV/Resume",
-                                  onChanged: (newValue) =>
-                                      setState(() => _groupValue1 = newValue),
+                                  onChanged: (newValue)
+                                  {
+                                    print(newValue);
+                                    setState(() {
+                                      _groupValue1 = newValue;
+                                    });
+                                  },
                                   groupValue: _groupValue1),
                             ),
                             Align(
@@ -487,8 +502,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 1,
                                   title: "Grant Writing",
-                                  onChanged: (newValue) =>
-                                      setState(() => _groupValue1 = newValue),
+                                  onChanged: (newValue)
+                                  {
+                                    print(newValue);
+                                    setState(() {
+                                      _groupValue1 = newValue;
+                                    });
+                                  },
                                   groupValue: _groupValue1),
                             ),
                             Align(
@@ -496,8 +516,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: AppUtils().myRadioButton(
                                   value: 2,
                                   title: "Power Point",
-                                  onChanged: (newValue) =>
-                                      setState(() => _groupValue1 = newValue),
+                                  onChanged: (newValue)
+                                  {
+                                    print(newValue);
+                                    setState(() {
+                                      _groupValue1 = newValue;
+                                    });
+                                  },
                                   groupValue: _groupValue1),
                             ),
                           ],
@@ -697,7 +722,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             specialNotes: notesController.text,
                               hours: dropdownvalue2,
                               completionTime: dropdownvalue3,
-
                             );
                           } else if (dropdownvalue.toString() ==
                               "No, I need something else") {
@@ -709,7 +733,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 EasyLoading.showError(
                                     "Please select Business/Professional Need");
                               } else {
-                                EasyLoading.showSuccess("Done");
+                                sendEmail(
+                                  needResearch: dropdownvalue,
+                                  name: nameController.text,
+                                  relatedProject: _groupValue == 1 ? "Professional":"Business/Word",
+                                  professionalNeeds: _groupValue1 == 0 ? "CV/Resume": _groupValue1 == 1 ? "Grant Writing":"Power Point",
+                                  email: emailController.text,
+                                  specialNotes: notesController.text,
+                                  hours: dropdownvalue2,
+                                  completionTime: dropdownvalue3,
+                                );
                               }
                             }
                           } else {
@@ -730,8 +763,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     EasyLoading.showError(
                                         "Please select Required Line Spacing");
                                   } else {
-                                    EasyLoading.showSuccess("Done");
-                                  }
+                                    sendEmail(
+                                       name: nameController.text,
+                                       email: emailController.text,
+                                      specialNotes: notesController.text,
+                                      hours: dropdownvalue2,
+                                      completionTime: dropdownvalue3,
+                                    );                                  }
                                 }
                               }
                             }
