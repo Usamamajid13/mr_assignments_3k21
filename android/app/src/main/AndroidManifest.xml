@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.Jack.MrAssignments3k21">
    <application
-        android:label="mr_assignments_3k21"
+        android:label="Assignments"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

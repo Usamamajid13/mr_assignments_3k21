@@ -683,7 +683,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 10,
                       ),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           selectFile();
                         },
                         child: Container(
@@ -696,22 +696,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            child: task != null ? Center(child: buildUploadStatus(task!)) : Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Icon(
-                                  Icons.upload_file,
-                                  color: Colors.grey,
-                                  size: 50,
-                                ),
-                                SizedBox(height: 40,),
-                                Text(
-                                  "Upload Documents/File",
-                                  style: TextStyle(color: Colors.grey, fontSize: 20),
-                                ),
-                              ],
-                            ))),
+                            child: task != null
+                                ? Center(child: buildUploadStatus(task!))
+                                : Center(
+                                    child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(
+                                        Icons.upload_file,
+                                        color: Colors.grey,
+                                        size: 50,
+                                      ),
+                                      SizedBox(
+                                        height: 40,
+                                      ),
+                                      Text(
+                                        "Upload Documents/File",
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 20),
+                                      ),
+                                    ],
+                                  ))),
                       ),
                     ],
                   ),
@@ -848,7 +853,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   var urlDownload;
+
   Future uploadFile() async {
     if (file == null) return;
 
@@ -873,30 +880,31 @@ class _HomeScreenState extends State<HomeScreen> {
     final path = result.files.single.path!;
 
     setState(() => file = File(path));
-  }
-  Future sendEmail({
-    required String name,
-    required String email,
-    relatedProject = "N/A",
-    needResearch = "N/A",
-    professionalNeeds = "N/A",
-    hours = "N/A",
-    classOrCourse = "N/A",
-    completionTime = "N/A",
-    experience = "N/A",
-    dataNeeded = "N/A",
-    requiredFormat = "N/A",
-    projectLength = "N/A",
-    lineSpacing = "N/A",
-    specialNotes = "N/A",
-    fileLink = "N/A"
-  }) async {
-    EasyLoading.show(status: "Loading..");
     uploadFile();
+  }
+
+  Future sendEmail(
+      {required String name,
+      required String email,
+      relatedProject = "N/A",
+      needResearch = "N/A",
+      professionalNeeds = "N/A",
+      hours = "N/A",
+      classOrCourse = "N/A",
+      completionTime = "N/A",
+      experience = "N/A",
+      dataNeeded = "N/A",
+      requiredFormat = "N/A",
+      projectLength = "N/A",
+      lineSpacing = "N/A",
+      specialNotes = "N/A",
+      fileLink = "N/A"}) async {
+    EasyLoading.show(status: "Loading..");
     const serviceId = 'service_xi42usb';
     const templateId = 'template_xpzp6vf';
     const userId = 'QwSXqLvcMvYbBfmEI';
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
@@ -920,7 +928,7 @@ class _HomeScreenState extends State<HomeScreen> {
             'required_format': requiredFormat,
             'line_spacing': lineSpacing,
             'special_notes': specialNotes,
-            'file_link':fileLink,
+            'file_link': fileLink,
           }
         }));
     if (response.statusCode == 200) {
@@ -929,21 +937,22 @@ class _HomeScreenState extends State<HomeScreen> {
       EasyLoading.showError("Somethings went wrong!");
     }
   }
-  Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
-    stream: task.snapshotEvents,
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        final snap = snapshot.data!;
-        final progress = snap.bytesTransferred / snap.totalBytes;
-        final percentage = (progress * 100).toStringAsFixed(2);
 
-        return Text(
-          '$percentage %',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        );
-      } else {
-        return Container();
-      }
-    },
-  );
+  Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
+        stream: task.snapshotEvents,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final snap = snapshot.data!;
+            final progress = snap.bytesTransferred / snap.totalBytes;
+            final percentage = (progress * 100).toStringAsFixed(2);
+
+            return Text(
+              '$percentage %',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            );
+          } else {
+            return Container();
+          }
+        },
+      );
 }
