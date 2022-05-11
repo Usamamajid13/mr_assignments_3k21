@@ -58,6 +58,15 @@ class _HomeScreenState extends State<HomeScreen> {
     final fileName = file != null ? basename(file!.path) : 'No File Selected';
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, googleSignInScreen);
+        },
+        child: Icon(Icons.chat,),
+        foregroundColor: Colors.white,
+        backgroundColor: redColor,
+        mini: false,
+      ),
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       drawer: AppUtils().drawer(context),
@@ -947,8 +956,8 @@ class _HomeScreenState extends State<HomeScreen> {
             final percentage = (progress * 100).toStringAsFixed(2);
 
             return Text(
-              '$percentage %',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              '${percentage == "100.00" ? "Document Uploaded": "Please wait.\n   "+percentage+"%"}',
+              style: TextStyle(fontSize: percentage == "100.00" ? 20 : 16, fontWeight: FontWeight.bold),
             );
           } else {
             return Container();

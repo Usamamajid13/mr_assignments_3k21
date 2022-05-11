@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "784591583451-2f60ven1uja93upkq0tbo59q35ig4pkf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Jack.MrAssignments3k21",
+            "certificate_hash": "723ff6ce4da77dd7e73ab61fd8397e19ca84287f"
+          }
+        },
+        {
           "client_id": "784591583451-indd6cfhiv5q6uk942gbhvp8jnfgkja1.apps.googleusercontent.com",
           "client_type": 3
         }

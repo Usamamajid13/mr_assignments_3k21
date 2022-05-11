@@ -41,6 +41,11 @@ dependencies:
   change_app_package_name: ^1.0.0
   file_picker: ^4.5.1
   firebase_app_check: ^0.0.6+11
+  google_sign_in: ^5.3.1
+  firebase_auth: ^3.3.17
+  cloud_firestore: ^3.1.14
+  intl: ^0.17.0
+  shared_preferences: ^2.0.14
 
 dev_dependencies:
   flutter_test:

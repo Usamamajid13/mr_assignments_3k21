@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'about_us_screen.dart';
+import 'chat_screen.dart';
 import 'constants.dart';
+import 'google_sign_in.dart';
 import 'home_screen.dart';
 import 'splash_screen.dart';
 import 'why_us_screen.dart';
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
         homeScreenRoute: (context) => const HomeScreen(),
         aboutUsScreenRoute: (context) => const AboutUsScreen(),
         whyUsScreenRoute: (context) => const WhyUsScreen(),
+        googleSignInScreen: (context) => const GoogleSignInScreen(),
+        chatScreenRoute: (context) => const ChatScreen(),
       },
     );
   }

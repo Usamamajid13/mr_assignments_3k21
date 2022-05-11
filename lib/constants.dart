@@ -11,3 +11,5 @@ const splashRoute = "/";
 const homeScreenRoute = "/homeScreenRoute";
 const aboutUsScreenRoute = "/aboutUsScreenRoute";
 const whyUsScreenRoute = "/whyUsScreenRoute";
+const googleSignInScreen = "/googleSignInScreen";
+const chatScreenRoute = "/chatScreenRoute";
