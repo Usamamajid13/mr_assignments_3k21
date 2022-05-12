@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mr_assignments_3k21/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -112,6 +113,7 @@ class Authentication {
     );
   }
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
+    EasyLoading.show(status: "Loading..");
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -119,7 +121,7 @@ class Authentication {
 
     final GoogleSignInAccount? googleSignInAccount =
     await googleSignIn.signIn();
-
+    EasyLoading.dismiss();
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path/path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -909,11 +910,11 @@ class _HomeScreenState extends State<HomeScreen> {
       specialNotes = "N/A",
       fileLink = "N/A"}) async {
     EasyLoading.show(status: "Loading..");
-    const serviceId = 'service_xi42usb';
-    const templateId = 'template_xpzp6vf';
-    const userId = 'QwSXqLvcMvYbBfmEI';
+    const serviceId = 'service_8dh8k7o';
+    const templateId = 'template_gglz1cq';
+    const userId = 'dYrUuQ4idq48jriE6';
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-
+    EasyLoading.dismiss();
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
@@ -940,11 +941,33 @@ class _HomeScreenState extends State<HomeScreen> {
             'file_link': fileLink,
           }
         }));
+    print(response.statusCode);
     if (response.statusCode == 200) {
       EasyLoading.showSuccess("Email sent Successfully!");
+      await FirebaseFirestore.instance
+          .collection("emails")
+          .add({
+        'user_name': name,
+        'user_email': email,
+        'related_project': relatedProject,
+        'need_research': needResearch,
+        'professional_needs': professionalNeeds,
+        '8_hours': hours,
+        'completion_time': completionTime,
+        'class_or_course': classOrCourse,
+        'experience': experience,
+        'data_needed': dataNeeded,
+        'project_length': projectLength,
+        'required_format': requiredFormat,
+        'line_spacing': lineSpacing,
+        'special_notes': specialNotes,
+        'file_link': fileLink,
+      });
     } else {
+      print(response.body);
       EasyLoading.showError("Somethings went wrong!");
     }
+    EasyLoading.dismiss();
   }
 
   Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,45 +23,28 @@ class _ChatScreenState extends State<ChatScreen> {
   getId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     id = prefs.getString("id");
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
   void initState() {
-    super.initState();
     getId();
     if (id != null || id != "") {
       Timer.periodic(const Duration(seconds: 1), (timer) async {
-        await getCounterZero();
       });
     }
     data();
+    Timer(Duration(seconds: 1), () {
+      setState(() {});
+    });
+    setState(() {});
+    super.initState();
   }
 
-  getCounterZero() async {
-    await FirebaseFirestore.instance
-        .collection("badge")
-        .doc(ChatRoomdId(id.toString(), "123"))
-        .collection("id")
-        .doc("123")
-        .set({"count": 0});
-  }
 
   data() async {
-    print("Error:::: 1");
     await ChatRoomdId(id.toString(), "123");
-    status();
-    print("Error:::: 2");
-    setState(() {
-
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    setState(() {});
   }
 
   @override
@@ -74,19 +58,41 @@ class _ChatScreenState extends State<ChatScreen> {
             return Stack(
               children: [
                 Container(
-                  height: 100,
+                  height: 120,
                   width: MediaQuery.of(context).size.width,
                   color: blueColor,
+                  padding: EdgeInsets.only(left: 10, right: 10, top: 30),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          final GoogleSignIn googleSignIn = GoogleSignIn();
+                          googleSignIn.disconnect();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Sign out",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
                       Text(
                         "Quick Chat",
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white
-                        ),
+                            color: Colors.white),
+                      ),
+                      Text(
+                        "Sign out",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: blueColor),
                       ),
                     ],
                   ),
@@ -94,10 +100,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 Positioned(
                   bottom: 0,
                   child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: const Radius.circular(30),
-                          topRight: const Radius.circular(30)),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30)),
                     ),
                     height: MediaQuery.of(context).orientation ==
                             Orientation.landscape
@@ -149,10 +155,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
                                           height: 60,
-                                          margin: EdgeInsets.only(bottom: 20),
+                                          margin:
+                                              const EdgeInsets.only(bottom: 20),
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -161,12 +169,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                             children: [
                                               Container(
                                                 width:
-                                                    constraints.maxWidth * 0.85,
+                                                    constraints.maxWidth * 0.75,
                                                 height: 65,
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 10),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20),
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
                                                 child: TextField(
                                                   onChanged: (text) {
                                                     chatController.text.isEmpty
@@ -188,15 +198,17 @@ class _ChatScreenState extends State<ChatScreen> {
                                                             .set({"count": 1});
                                                   },
                                                   controller: chatController,
+                                                  style: TextStyle(
+                                                      color: Colors.white),
                                                   decoration:
                                                       const InputDecoration(
-                                                    hintText:
-                                                        'Type Your Message',
-                                                    border: InputBorder.none,
-                                                        hintStyle: TextStyle(
-                                                          color: Colors.white
-                                                        )
-                                                  ),
+                                                          hintText:
+                                                              'Type Your Message',
+                                                          border:
+                                                              InputBorder.none,
+                                                          hintStyle: TextStyle(
+                                                              color: Colors
+                                                                  .white)),
                                                 ),
                                               ),
                                               GestureDetector(
@@ -209,9 +221,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     await onSendMessage(text);
                                                   },
                                                   child: Container(
-                                                      padding: EdgeInsets.symmetric(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
                                                           horizontal: 10),
-                                                      child: const Icon(Icons.send,color: Colors.white,))),
+                                                      child: const Icon(
+                                                        Icons.send,
+                                                        color: Colors.white,
+                                                      ))),
                                             ],
                                           )),
                                     ],
@@ -252,16 +268,16 @@ class _ChatScreenState extends State<ChatScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             map['message'],
-                            style: TextStyle(
-                              color: Colors.white
-                            ),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: MediaQuery.of(context).size.width * 0.01),
-                        child: Text("${DateFormat('hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(int.parse(map['time'])))}"),
+                        child: Text(DateFormat('hh:mm a').format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(map['time'])))),
                       ),
                     ],
                   ),
@@ -289,7 +305,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: MediaQuery.of(context).size.width * 0.01),
-                        child: Text("${DateFormat('hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(int.parse(map['time'])))}"),
+                        child: Text(DateFormat('hh:mm a').format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(map['time'])))),
                       )
                     ],
                   ),
@@ -361,6 +379,7 @@ class _ChatScreenState extends State<ChatScreen> {
               .set({"list": []});
         }
       } on StateError catch (e) {
+        print(e.message);
         if (e.message == e.message) {
           await _fireStore
               .collection("ChatIds")
@@ -408,54 +427,10 @@ class _ChatScreenState extends State<ChatScreen> {
       "lastMsg": lastMessage,
       "time": DateTime.now().millisecondsSinceEpoch.toString()
     });
-
-    int count = 0;
-    try {
-      var ids = await FirebaseFirestore.instance
-          .collection("badge")
-          .doc(chatRoomid.toString())
-          .collection("id")
-          .doc(id.toString())
-          .get();
-
-      count = ids["count"];
-      count += 1;
-      await FirebaseFirestore.instance
-          .collection("badge")
-          .doc(chatRoomid.toString())
-          .collection("id")
-          .doc(id)
-          .set({"count": count});
-    } on StateError catch (e) {
-      count += 1;
-      await FirebaseFirestore.instance
-          .collection("badge")
-          .doc(chatRoomid.toString())
-          .collection("id")
-          .doc(id)
-          .set({"count": count});
-    }
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
   }
 
   String ChatRoomdId(var user1, var user2) {
-      chatRoomid = '$user2-$user1';
-      return chatRoomid;
-  }
-
-  status() {
-    FirebaseFirestore.instance
-        .collection("Status")
-        .doc(chatRoomid)
-        .collection("id")
-        .doc("123")
-        .set({"count": 0});
-    FirebaseFirestore.instance
-        .collection("Status")
-        .doc(chatRoomid)
-        .collection("id")
-        .doc("123")
-        .set({"count": 0});
+    chatRoomid = '$user2-$user1';
+    return chatRoomid;
   }
 }
