@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         aboutUsScreenRoute: (context) => const AboutUsScreen(),
         whyUsScreenRoute: (context) => const WhyUsScreen(),
         googleSignInScreen: (context) => const GoogleSignInScreen(),
-        chatScreenRoute: (context) => const ChatScreen(),
+        chatScreenRoute: (context) => ChatScreen(),
       },
     );
   }

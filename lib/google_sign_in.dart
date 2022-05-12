@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mr_assignments_3k21/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
   const GoogleSignInScreen({Key? key}) : super(key: key);
@@ -54,6 +55,8 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                       User? user =
                           await Authentication.signInWithGoogle(context: context);
                       if (user != null) {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.setString("id", user.uid);
                         Navigator.pushNamed(context, chatScreenRoute);
                       }
                     },

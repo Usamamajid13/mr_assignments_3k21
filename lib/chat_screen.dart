@@ -1,4 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 
@@ -6,155 +10,452 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  var searchController = TextEditingController();
-  List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  var chatRoomid;
+  final TextEditingController chatController = TextEditingController();
+  var id;
+
+  getId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    id = prefs.getString("id");
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getId();
+    if (id != null || id != "") {
+      Timer.periodic(const Duration(seconds: 1), (timer) async {
+        await getCounterZero();
+      });
+    }
+    data();
+  }
+
+  getCounterZero() async {
+    await FirebaseFirestore.instance
+        .collection("badge")
+        .doc(ChatRoomdId(id.toString(), "123"))
+        .collection("id")
+        .doc("123")
+        .set({"count": 0});
+  }
+
+  data() async {
+    print("Error:::: 1");
+    await ChatRoomdId(id.toString(), "123");
+    status();
+    print("Error:::: 2");
+    setState(() {
+
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body:Stack(
-        children: <Widget>[
-          Container(
-            height: 100,
-            width: MediaQuery.of(context).size.width,
-            color: blueColor,
-            padding: const EdgeInsets.only(top: 30),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    "Chats",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 110,bottom: 60),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (int i = 0; i < messages.length; i++)
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 14, right: 14, top: 10, bottom: 10),
-                      child: Align(
-                        alignment: (messages[i].messageType == "receiver"
-                            ? Alignment.topLeft
-                            : Alignment.topRight),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: (messages[i].messageType == "receiver"
-                                ? Colors.grey.shade200
-                                : blueColor.withOpacity(0.6)),
-                          ),
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            messages[i].messageContent,
-                            style:   TextStyle(fontSize: 15,color: messages[i].messageType == "receiver" ? Colors.black:Colors.white),
-                          ),
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  color: blueColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "Quick Chat",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
                         ),
                       ),
-                    )
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
-              height: 60,
-              width: double.infinity,
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: redColor,
-                        borderRadius: BorderRadius.circular(30),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: const Radius.circular(30),
+                          topRight: const Radius.circular(30)),
+                    ),
+                    height: MediaQuery.of(context).orientation ==
+                            Orientation.landscape
+                        ? constraints.maxHeight * 0.5
+                        : constraints.maxHeight * 0.80,
+                    width: constraints.maxWidth,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, top: 10, bottom: 0),
+                      child: SizedBox(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                height:
+                                    MediaQuery.of(context).size.height * .78,
+                                child: StreamBuilder<QuerySnapshot>(
+                                    stream: _fireStore
+                                        .collection('chatroom')
+                                        .doc(chatRoomid)
+                                        .collection('chats')
+                                        .orderBy("time", descending: true)
+                                        .snapshots(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (snapshot.data != null) {
+                                        return ListView.builder(
+                                            reverse: true,
+                                            itemCount:
+                                                snapshot.data!.docs.length,
+                                            itemBuilder: (context, index) {
+                                              Map<String, dynamic>? map =
+                                                  snapshot.data!.docs[index]
+                                                          .data()
+                                                      as Map<String, dynamic>?;
+                                              return checkIsSenderOrReciever(
+                                                map,
+                                              );
+                                            });
+                                      } else {
+                                        return Container();
+                                      }
+                                    }),
+                              ),
+                            ),
+                            SizedBox(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                          height: 60,
+                                          margin: EdgeInsets.only(bottom: 20),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: blueColor),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                width:
+                                                    constraints.maxWidth * 0.85,
+                                                height: 65,
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 10),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 20),
+                                                child: TextField(
+                                                  onChanged: (text) {
+                                                    chatController.text.isEmpty
+                                                        ? FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                "Status")
+                                                            .doc(chatRoomid)
+                                                            .collection("id")
+                                                            .doc("123")
+                                                            .set({"count": 0})
+                                                        : FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                "Status")
+                                                            .doc(chatRoomid)
+                                                            .collection("id")
+                                                            .doc("123")
+                                                            .set({"count": 1});
+                                                  },
+                                                  controller: chatController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    hintText:
+                                                        'Type Your Message',
+                                                    border: InputBorder.none,
+                                                        hintStyle: TextStyle(
+                                                          color: Colors.white
+                                                        )
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                  onTap: () async {
+                                                    String text = chatController
+                                                        .text
+                                                        .toString();
+
+                                                    chatController.clear();
+                                                    await onSendMessage(text);
+                                                  },
+                                                  child: Container(
+                                                      padding: EdgeInsets.symmetric(
+                                                          horizontal: 10),
+                                                      child: const Icon(Icons.send,color: Colors.white,))),
+                                            ],
+                                          )),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  const Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: "Write message...",
-                          hintStyle: TextStyle(color: Colors.black54),
-                          border: InputBorder.none),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  FloatingActionButton(
-                    onPressed: () {},
-                    child: const Icon(
-                      Icons.send,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                    backgroundColor: redColor,
-                    elevation: 0,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
-}
 
-class ChatMessage {
-  String messageContent;
-  String messageType;
+  checkIsSenderOrReciever(Map<String, dynamic>? map) {
+    return Container(
+        child: map!['sendby'] == id.toString()
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.55),
+                        decoration: BoxDecoration(
+                            color: redColor,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            map['message'],
+                            style: TextStyle(
+                              color: Colors.white
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.width * 0.01),
+                        child: Text("${DateFormat('hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(int.parse(map['time'])))}"),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.55),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            map['message'],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.width * 0.01),
+                        child: Text("${DateFormat('hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(int.parse(map['time'])))}"),
+                      )
+                    ],
+                  ),
+                ],
+              ));
+  }
 
-  ChatMessage({required this.messageContent, required this.messageType});
+  Future<void> onSendMessage(String text) async {
+    String lastMessage = text;
+    if (text.isNotEmpty) {
+      Map<String, dynamic> messages = {
+        "sendby": id.toString(),
+        "message": text,
+        "time": DateTime.now().millisecondsSinceEpoch.toString(),
+      };
+
+      await _fireStore
+          .collection('chatroom')
+          .doc(chatRoomid)
+          .collection('chats')
+          .add(messages);
+
+      var idsList = await _fireStore
+          .collection("ChatIds")
+          .doc("ids")
+          .collection(id.toString())
+          .doc(id.toString())
+          .get();
+
+      var friendIdsList = await _fireStore
+          .collection("ChatIds")
+          .doc("ids")
+          .collection("123")
+          .doc("123")
+          .get();
+
+      try {
+        if (idsList["list"] != null) {
+          List list = idsList["list"];
+          List friendList = friendIdsList["list"];
+          if (!list.contains(chatRoomid)) {
+            list.add(chatRoomid);
+          }
+          if (!friendList.contains(chatRoomid)) {
+            friendList.add(chatRoomid);
+          }
+          await _fireStore
+              .collection("ChatIds")
+              .doc("ids")
+              .collection(id.toString())
+              .doc(id.toString())
+              .set({
+            "list": list,
+          });
+          await _fireStore
+              .collection("ChatIds")
+              .doc("ids")
+              .collection("123")
+              .doc("123")
+              .set({
+            "list": friendList,
+          });
+        } else {
+          await _fireStore
+              .collection("ChatIds")
+              .doc("ids")
+              .collection(id.toString())
+              .doc(id.toString())
+              .set({"list": []});
+        }
+      } on StateError catch (e) {
+        if (e.message == e.message) {
+          await _fireStore
+              .collection("ChatIds")
+              .doc("ids")
+              .collection(id.toString())
+              .doc(id.toString())
+              .set({"list": []});
+          var idsList = await _fireStore
+              .collection("ChatIds")
+              .doc("ids")
+              .collection(id.toString())
+              .doc(id.toString())
+              .get();
+          if (idsList["list"] != null) {
+            List list = idsList["list"];
+            List friendList = [];
+            if (!list.contains(chatRoomid)) {
+              list.add(chatRoomid);
+            }
+            await _fireStore
+                .collection("ChatIds")
+                .doc("ids")
+                .collection(id.toString())
+                .doc(id.toString())
+                .set({
+              "list": list,
+            });
+            await _fireStore
+                .collection("ChatIds")
+                .doc("ids")
+                .collection("123")
+                .doc("123")
+                .set({
+              "list": friendList,
+            });
+          }
+        }
+      }
+    }
+
+    FirebaseFirestore.instance
+        .collection("lastMessage")
+        .doc(chatRoomid.toString())
+        .set({
+      "lastMsg": lastMessage,
+      "time": DateTime.now().millisecondsSinceEpoch.toString()
+    });
+
+    int count = 0;
+    try {
+      var ids = await FirebaseFirestore.instance
+          .collection("badge")
+          .doc(chatRoomid.toString())
+          .collection("id")
+          .doc(id.toString())
+          .get();
+
+      count = ids["count"];
+      count += 1;
+      await FirebaseFirestore.instance
+          .collection("badge")
+          .doc(chatRoomid.toString())
+          .collection("id")
+          .doc(id)
+          .set({"count": count});
+    } on StateError catch (e) {
+      count += 1;
+      await FirebaseFirestore.instance
+          .collection("badge")
+          .doc(chatRoomid.toString())
+          .collection("id")
+          .doc(id)
+          .set({"count": count});
+    }
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+  }
+
+  String ChatRoomdId(var user1, var user2) {
+      chatRoomid = '$user2-$user1';
+      return chatRoomid;
+  }
+
+  status() {
+    FirebaseFirestore.instance
+        .collection("Status")
+        .doc(chatRoomid)
+        .collection("id")
+        .doc("123")
+        .set({"count": 0});
+    FirebaseFirestore.instance
+        .collection("Status")
+        .doc(chatRoomid)
+        .collection("id")
+        .doc("123")
+        .set({"count": 0});
+  }
 }
