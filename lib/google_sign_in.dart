@@ -56,9 +56,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                       User? user =
                           await Authentication.signInWithGoogle(context: context);
                       if (user != null) {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        prefs.setString("id", user.uid);
-                        Navigator.pushNamed(context, chatScreenRoute);
+                        Navigator.pushNamed(context, chatScreenRoute,arguments: user.uid);
                       }
                     },
                     child: Container(

@@ -8,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  var id;
+  ChatScreen(this.id, {Key? key}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -18,32 +19,27 @@ class _ChatScreenState extends State<ChatScreen> {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   var chatRoomid;
   final TextEditingController chatController = TextEditingController();
-  var id;
 
-  getId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    id = prefs.getString("id");
-    setState(() {});
-  }
+
 
   @override
   void initState() {
-    getId();
-    if (id != null || id != "") {
+    if (widget.id != null || widget.id != "") {
       Timer.periodic(const Duration(seconds: 1), (timer) async {
       });
     }
-    data();
-    Timer(Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 1), () {
       setState(() {});
     });
+    data();
+
     setState(() {});
     super.initState();
   }
 
 
   data() async {
-    await ChatRoomdId(id.toString(), "123");
+    await ChatRoomdId(widget.id.toString(), "123");
     setState(() {});
   }
 
@@ -61,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   height: 120,
                   width: MediaQuery.of(context).size.width,
                   color: blueColor,
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 30),
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -72,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },
-                        child: Text(
+                        child: const Text(
                           "Sign out",
                           style: TextStyle(
                               fontSize: 16,
@@ -80,14 +76,14 @@ class _ChatScreenState extends State<ChatScreen> {
                               color: Colors.white),
                         ),
                       ),
-                      Text(
+                      const Text(
                         "Quick Chat",
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
                       ),
-                      Text(
+                      const Text(
                         "Sign out",
                         style: TextStyle(
                             fontSize: 16,
@@ -178,27 +174,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 20),
                                                 child: TextField(
-                                                  onChanged: (text) {
-                                                    chatController.text.isEmpty
-                                                        ? FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                "Status")
-                                                            .doc(chatRoomid)
-                                                            .collection("id")
-                                                            .doc("123")
-                                                            .set({"count": 0})
-                                                        : FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                "Status")
-                                                            .doc(chatRoomid)
-                                                            .collection("id")
-                                                            .doc("123")
-                                                            .set({"count": 1});
-                                                  },
                                                   controller: chatController,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       color: Colors.white),
                                                   decoration:
                                                       const InputDecoration(
@@ -251,7 +228,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   checkIsSenderOrReciever(Map<String, dynamic>? map) {
     return Container(
-        child: map!['sendby'] == id.toString()
+        child: map!['sendby'] == widget.id.toString()
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -319,7 +296,7 @@ class _ChatScreenState extends State<ChatScreen> {
     String lastMessage = text;
     if (text.isNotEmpty) {
       Map<String, dynamic> messages = {
-        "sendby": id.toString(),
+        "sendby": widget.id.toString(),
         "message": text,
         "time": DateTime.now().millisecondsSinceEpoch.toString(),
       };
@@ -333,8 +310,8 @@ class _ChatScreenState extends State<ChatScreen> {
       var idsList = await _fireStore
           .collection("ChatIds")
           .doc("ids")
-          .collection(id.toString())
-          .doc(id.toString())
+          .collection(widget.id.toString())
+          .doc(widget.id.toString())
           .get();
 
       var friendIdsList = await _fireStore
@@ -357,8 +334,8 @@ class _ChatScreenState extends State<ChatScreen> {
           await _fireStore
               .collection("ChatIds")
               .doc("ids")
-              .collection(id.toString())
-              .doc(id.toString())
+              .collection(widget.id.toString())
+              .doc(widget.id.toString())
               .set({
             "list": list,
           });
@@ -374,8 +351,8 @@ class _ChatScreenState extends State<ChatScreen> {
           await _fireStore
               .collection("ChatIds")
               .doc("ids")
-              .collection(id.toString())
-              .doc(id.toString())
+              .collection(widget.id.toString())
+              .doc(widget.id.toString())
               .set({"list": []});
         }
       } on StateError catch (e) {
@@ -384,14 +361,14 @@ class _ChatScreenState extends State<ChatScreen> {
           await _fireStore
               .collection("ChatIds")
               .doc("ids")
-              .collection(id.toString())
-              .doc(id.toString())
+              .collection(widget.id.toString())
+              .doc(widget.id.toString())
               .set({"list": []});
           var idsList = await _fireStore
               .collection("ChatIds")
               .doc("ids")
-              .collection(id.toString())
-              .doc(id.toString())
+              .collection(widget.id.toString())
+              .doc(widget.id.toString())
               .get();
           if (idsList["list"] != null) {
             List list = idsList["list"];
@@ -402,8 +379,8 @@ class _ChatScreenState extends State<ChatScreen> {
             await _fireStore
                 .collection("ChatIds")
                 .doc("ids")
-                .collection(id.toString())
-                .doc(id.toString())
+                .collection(widget.id.toString())
+                .doc(widget.id.toString())
                 .set({
               "list": list,
             });
@@ -429,8 +406,12 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  String ChatRoomdId(var user1, var user2) {
-    chatRoomid = '$user2-$user1';
-    return chatRoomid;
+ ChatRoomdId(var user1, var user2) {
+    if(user1!=null)
+      {
+        chatRoomid = '$user2-$user1';
+        print(chatRoomid);
+        return chatRoomid;
+      }
   }
 }
