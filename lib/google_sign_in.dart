@@ -14,8 +14,6 @@ class GoogleSignInScreen extends StatefulWidget {
 }
 
 class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +31,9 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                   Text(
                     "Chats",
                     style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white
-                    ),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ],
               ),
@@ -47,34 +44,35 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Please sign in with Google to use this feature",
-                      style: TextStyle(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
                   const SizedBox(
                     height: 20,
                   ),
                   GestureDetector(
                     onTap: () async {
-                      User? user =
-                          await Authentication.signInWithGoogle(context: context);
+                      User? user = await Authentication.signInWithGoogle(
+                          context: context);
                       if (user != null) {
-                        Navigator.pushNamed(context, chatScreenRoute,arguments: user.uid);
+                        Navigator.pushNamed(context, chatScreenRoute,
+                            arguments: user.uid);
                       }
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.6,
                         height: 54,
                         margin: const EdgeInsets.all(15),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0,1),
-                              blurRadius: 3
-                            )
-                          ]
-                        ),
-
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: Colors.grey,
+                                  offset: Offset(0, 1),
+                                  blurRadius: 3)
+                            ]),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -86,7 +84,10 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                               width: 10,
                             ),
                             const Text("Sign in with Google",
-                                style: TextStyle(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold)),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold)),
                           ],
                         )),
                   ),
@@ -110,6 +111,7 @@ class Authentication {
       ),
     );
   }
+
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     EasyLoading.show(status: "Loading..");
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -118,11 +120,11 @@ class Authentication {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount? googleSignInAccount =
-    await googleSignIn.signIn();
+        await googleSignIn.signIn();
     EasyLoading.dismiss();
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+          await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
@@ -131,16 +133,20 @@ class Authentication {
 
       try {
         final UserCredential userCredential =
-        await auth.signInWithCredential(credential);
+            await auth.signInWithCredential(credential);
 
         user = userCredential.user;
         if (user != null) {
-          final QuerySnapshot result =
-          await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: user.uid).get();
-          final List < DocumentSnapshot > documents = result.docs;
+          final QuerySnapshot result = await FirebaseFirestore.instance
+              .collection('users')
+              .where('id', isEqualTo: user.uid)
+              .get();
+          final List<DocumentSnapshot> documents = result.docs;
           if (documents.isEmpty) {
-            FirebaseFirestore.instance.collection('users').doc(user.uid).set(
-                { 'nickname': user.displayName, 'id': user.uid });
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .set({'nickname': user.displayName, 'id': user.uid});
           }
         }
       } on FirebaseAuthException catch (e) {
@@ -148,15 +154,13 @@ class Authentication {
           ScaffoldMessenger.of(context).showSnackBar(
             Authentication.customSnackBar(
               content:
-              'The account already exists with a different credential.',
+                  'The account already exists with a different credential.',
             ),
           );
-        }
-        else if (e.code == 'invalid-credential') {
+        } else if (e.code == 'invalid-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
             Authentication.customSnackBar(
-              content:
-              'Error occurred while accessing credentials. Try again.',
+              content: 'Error occurred while accessing credentials. Try again.',
             ),
           );
         }

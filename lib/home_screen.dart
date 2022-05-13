@@ -56,13 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, googleSignInScreen);
         },
-        child: const Icon(Icons.chat,),
+        child: const Icon(
+          Icons.chat,
+        ),
         foregroundColor: Colors.white,
         backgroundColor: redColor,
         mini: false,
@@ -873,7 +874,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final snapshot = await task!.whenComplete(() {});
     urlDownload = await snapshot.ref.getDownloadURL();
-
   }
 
   Future selectFile() async {
@@ -936,9 +936,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }));
     if (response.statusCode == 200) {
       EasyLoading.showSuccess("Email sent Successfully!");
-      await FirebaseFirestore.instance
-          .collection("emails")
-          .add({
+      await FirebaseFirestore.instance.collection("emails").add({
         'user_name': name,
         'user_email': email,
         'related_project': relatedProject,
@@ -969,8 +967,12 @@ class _HomeScreenState extends State<HomeScreen> {
             final progress = snap.bytesTransferred / snap.totalBytes;
             final percentage = (progress * 100).toStringAsFixed(2);
             return Text(
-              percentage == "100.00" ? "Document Uploaded": "Please wait.\n   "+percentage+"%",
-              style: TextStyle(fontSize: percentage == "100.00" ? 20 : 16, fontWeight: FontWeight.bold),
+              percentage == "100.00"
+                  ? "Document Uploaded"
+                  : "Please wait.\n   " + percentage + "%",
+              style: TextStyle(
+                  fontSize: percentage == "100.00" ? 20 : 16,
+                  fontWeight: FontWeight.bold),
             );
           } else {
             return Container();
