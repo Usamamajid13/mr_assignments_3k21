@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'constants.dart';
 
 class ChatScreen extends StatefulWidget {
   var id;
+
   ChatScreen(this.id, {Key? key}) : super(key: key);
 
   @override
@@ -20,13 +19,10 @@ class _ChatScreenState extends State<ChatScreen> {
   var chatRoomid;
   final TextEditingController chatController = TextEditingController();
 
-
-
   @override
   void initState() {
     if (widget.id != null || widget.id != "") {
-      Timer.periodic(const Duration(seconds: 1), (timer) async {
-      });
+      Timer.periodic(const Duration(seconds: 1), (timer) async {});
     }
     Timer(const Duration(seconds: 1), () {
       setState(() {});
@@ -37,9 +33,8 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
-
   data() async {
-    await ChatRoomdId(widget.id.toString(), "123");
+    await chatRoomId(widget.id.toString(), "123");
     setState(() {});
   }
 
@@ -270,7 +265,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         constraints: BoxConstraints(
                             maxWidth: MediaQuery.of(context).size.width * 0.55),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.red.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -356,7 +351,6 @@ class _ChatScreenState extends State<ChatScreen> {
               .set({"list": []});
         }
       } on StateError catch (e) {
-        print(e.message);
         if (e.message == e.message) {
           await _fireStore
               .collection("ChatIds")
@@ -406,12 +400,10 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
- ChatRoomdId(var user1, var user2) {
-    if(user1!=null)
-      {
-        chatRoomid = '$user2-$user1';
-        print(chatRoomid);
-        return chatRoomid;
-      }
+  chatRoomId(var user1, var user2) {
+    if (user1 != null) {
+      chatRoomid = '$user2-$user1';
+      return chatRoomid;
+    }
   }
 }

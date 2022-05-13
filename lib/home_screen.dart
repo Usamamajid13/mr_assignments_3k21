@@ -56,14 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final fileName = file != null ? basename(file!.path) : 'No File Selected';
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, googleSignInScreen);
         },
-        child: Icon(Icons.chat,),
+        child: const Icon(Icons.chat,),
         foregroundColor: Colors.white,
         backgroundColor: redColor,
         mini: false,
@@ -464,7 +463,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   value: 0,
                                   title: "Business/Work",
                                   onChanged: (newValue) {
-                                    print(newValue);
                                     setState(() {
                                       _groupValue = newValue;
                                     });
@@ -477,7 +475,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   value: 1,
                                   title: "Professional",
                                   onChanged: (newValue) {
-                                    print(newValue);
                                     setState(() {
                                       _groupValue = newValue;
                                     });
@@ -507,7 +504,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   value: 0,
                                   title: "CV/Resume",
                                   onChanged: (newValue) {
-                                    print(newValue);
                                     setState(() {
                                       _groupValue1 = newValue;
                                     });
@@ -520,7 +516,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   value: 1,
                                   title: "Grant Writing",
                                   onChanged: (newValue) {
-                                    print(newValue);
                                     setState(() {
                                       _groupValue1 = newValue;
                                     });
@@ -533,7 +528,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   value: 2,
                                   title: "Power Point",
                                   onChanged: (newValue) {
-                                    print(newValue);
                                     setState(() {
                                       _groupValue1 = newValue;
                                     });
@@ -751,7 +745,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               specialNotes: notesController.text,
                               hours: dropdownvalue2,
                               completionTime: dropdownvalue3,
-                              fileLink: urlDownload ?? "N/A",
+                              fileLink: urlDownload,
                             );
                           } else if (dropdownvalue.toString() ==
                               "No, I need something else") {
@@ -778,7 +772,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   specialNotes: notesController.text,
                                   hours: dropdownvalue2,
                                   completionTime: dropdownvalue3,
-                                  fileLink: urlDownload ?? "N/A",
+                                  fileLink: urlDownload,
                                 );
                               }
                             }
@@ -825,7 +819,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       specialNotes: notesController.text,
                                       hours: dropdownvalue2,
                                       completionTime: dropdownvalue3,
-                                      fileLink: urlDownload ?? "N/A",
+                                      fileLink: urlDownload,
                                     );
                                   }
                                 }
@@ -864,7 +858,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  var urlDownload;
+  var urlDownload = "N/A";
 
   Future uploadFile() async {
     if (file == null) return;
@@ -880,7 +874,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final snapshot = await task!.whenComplete(() {});
     urlDownload = await snapshot.ref.getDownloadURL();
 
-    print('Download-Link: $urlDownload');
   }
 
   Future selectFile() async {
@@ -941,7 +934,6 @@ class _HomeScreenState extends State<HomeScreen> {
             'file_link': fileLink,
           }
         }));
-    print(response.statusCode);
     if (response.statusCode == 200) {
       EasyLoading.showSuccess("Email sent Successfully!");
       await FirebaseFirestore.instance
@@ -964,7 +956,6 @@ class _HomeScreenState extends State<HomeScreen> {
         'file_link': fileLink,
       });
     } else {
-      print(response.body);
       EasyLoading.showError("Somethings went wrong!");
     }
     EasyLoading.dismiss();
@@ -977,9 +968,8 @@ class _HomeScreenState extends State<HomeScreen> {
             final snap = snapshot.data!;
             final progress = snap.bytesTransferred / snap.totalBytes;
             final percentage = (progress * 100).toStringAsFixed(2);
-
             return Text(
-              '${percentage == "100.00" ? "Document Uploaded": "Please wait.\n   "+percentage+"%"}',
+              percentage == "100.00" ? "Document Uploaded": "Please wait.\n   "+percentage+"%",
               style: TextStyle(fontSize: percentage == "100.00" ? 20 : 16, fontWeight: FontWeight.bold),
             );
           } else {

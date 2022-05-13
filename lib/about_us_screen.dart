@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'app_utils.dart';
 import 'constants.dart';
 
@@ -28,11 +27,11 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
             child: Row(
               children: [
                 GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       _scaffoldKey.currentState!.openDrawer();
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(right: 10,left: 30),
+                      padding: const EdgeInsets.only(right: 10, left: 30),
                       height: 200,
                       child: const Icon(
                         Icons.list,
@@ -42,17 +41,25 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                     )),
                 const Expanded(
                   child: Center(
-                    child: Text("About Us",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
+                    child: Text(
+                      "About Us",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-                Container(width: 80,)
+                Container(
+                  width: 80,
+                )
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
-              children:  [
+              children: [
                 const SizedBox(
                   height: 20,
                 ),

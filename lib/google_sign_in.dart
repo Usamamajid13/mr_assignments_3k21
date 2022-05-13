@@ -41,12 +41,12 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.7,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Please sign in with Google to use this feature",
+                  const Text("Please sign in with Google to use this feature",
                       style: TextStyle(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold)),
                   const SizedBox(
                     height: 20,
@@ -106,7 +106,7 @@ class Authentication {
       backgroundColor: Colors.black,
       content: Text(
         content,
-        style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+        style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
       ),
     );
   }
@@ -138,7 +138,7 @@ class Authentication {
           final QuerySnapshot result =
           await FirebaseFirestore.instance.collection('users').where('id', isEqualTo: user.uid).get();
           final List < DocumentSnapshot > documents = result.docs;
-          if (documents.length == 0) {
+          if (documents.isEmpty) {
             FirebaseFirestore.instance.collection('users').doc(user.uid).set(
                 { 'nickname': user.displayName, 'id': user.uid });
           }
