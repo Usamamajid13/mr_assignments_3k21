@@ -952,6 +952,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'line_spacing': lineSpacing,
         'special_notes': specialNotes,
         'file_link': fileLink,
+        'done': 0,
       });
     } else {
       EasyLoading.showError("Somethings went wrong!");
