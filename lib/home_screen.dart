@@ -936,7 +936,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }));
     if (response.statusCode == 200) {
       EasyLoading.showSuccess("Email sent Successfully!");
-      await FirebaseFirestore.instance.collection("emails").add({
+      await FirebaseFirestore.instance.collection("emails").doc(specialNotes).set({
         'user_name': name,
         'user_email': email,
         'related_project': relatedProject,
