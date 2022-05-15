@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
+
 import 'constants.dart';
 
 class ChatScreen extends StatefulWidget {
   var id;
 
-  ChatScreen(this.id, {Key? key}) : super(key: key);
+  ChatScreen(this.id);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -18,31 +18,36 @@ class _ChatScreenState extends State<ChatScreen> {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   var chatRoomid;
   final TextEditingController chatController = TextEditingController();
+
+  Timer timer = Timer(const Duration(seconds: 0), () {});
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.id != null || widget.id != "") {
+      getCounterZero();
+    }
+    data();
+  }
+
   getCounterZero() async {
     await FirebaseFirestore.instance
         .collection("badge")
-        .doc(chatRoomId(widget.id.toString(), "123"))
+        .doc(chatRoomId(widget.id, "123"))
         .collection("id")
         .doc("123")
         .set({"count": 0});
   }
-  @override
-  void initState() {
-    if (widget.id != null || widget.id != "") {
 
-    }
-    Timer(const Duration(seconds: 1), () {
-      setState(() {});
-    });
-    data();
-
-    setState(() {});
-    super.initState();
+  data() {
+    chatRoomId(widget.id, "123");
   }
 
-  data() async {
-    await chatRoomId(widget.id.toString(), "123");
-    setState(() {});
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
   }
 
   @override
@@ -56,41 +61,59 @@ class _ChatScreenState extends State<ChatScreen> {
             return Stack(
               children: [
                 Container(
-                  height: 120,
-                  width: MediaQuery.of(context).size.width,
-                  color: blueColor,
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight * 0.15,
+                  decoration: const BoxDecoration(
+                    color: blueColor,
+                  ),
+                  padding: EdgeInsets.only(
+                      left: constraints.maxWidth * 0.07,
+                      right: constraints.maxWidth * 0.07),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          final GoogleSignIn googleSignIn = GoogleSignIn();
-                          googleSignIn.disconnect();
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          "Sign out",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                      const Text(
-                        "Quick Chat",
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      const Text(
-                        "Sign out",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: blueColor),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: IconButton(
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () {
+                                  final GoogleSignIn googleSignIn = GoogleSignIn();
+                                  googleSignIn.disconnect();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(),
+                                SingleChildScrollView(
+                                  child: Column(
+                                    children: const [
+                                      Text(
+                                        "Quick Chat",
+                                        style: TextStyle(
+                                            fontSize: 26, color: Colors.white),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Container(),
+                                Container(),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -148,72 +171,47 @@ class _ChatScreenState extends State<ChatScreen> {
                                     }),
                               ),
                             ),
-                            SizedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                          height: 60,
-                                          margin:
-                                              const EdgeInsets.only(bottom: 20),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: blueColor),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                width:
-                                                    constraints.maxWidth * 0.75,
-                                                height: 65,
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 10),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: TextField(
-                                                  controller: chatController,
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          hintText:
-                                                              'Type Your Message',
-                                                          border:
-                                                              InputBorder.none,
-                                                          hintStyle: TextStyle(
-                                                              color: Colors
-                                                                  .white)),
-                                                ),
-                                              ),
-                                              GestureDetector(
-                                                  onTap: () async {
-                                                    String text = chatController
-                                                        .text
-                                                        .toString();
-
-                                                    chatController.clear();
-                                                    await onSendMessage(text);
-                                                  },
-                                                  child: Container(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 10),
-                                                      child: const Icon(
-                                                        Icons.send,
-                                                        color: Colors.white,
-                                                      ))),
-                                            ],
-                                          )),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                            Container(
+                                width: constraints.maxWidth * 0.9,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: blueColor),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: constraints.maxWidth * 0.80,
+                                      height: 65,
+                                      margin: EdgeInsets.symmetric(
+                                          vertical:
+                                              constraints.maxWidth * 0.02),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              constraints.maxWidth * 0.05),
+                                      child: TextField(
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                        controller: chatController,
+                                        decoration: const InputDecoration(
+                                            hintText: 'Type Your Message',
+                                            border: InputBorder.none,
+                                            hintStyle:
+                                                TextStyle(color: Colors.white)),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                        onTap: () async {
+                                          String text =
+                                              chatController.text.toString();
+                                          chatController.clear();
+                                          await onSendMessage(text);
+                                        },
+                                        child: const Icon(
+                                          Icons.send,
+                                          color: Colors.white,
+                                        )),
+                                  ],
+                                )),
                           ],
                         ),
                       ),
@@ -241,22 +239,25 @@ class _ChatScreenState extends State<ChatScreen> {
                         constraints: BoxConstraints(
                             maxWidth: MediaQuery.of(context).size.width * 0.55),
                         decoration: BoxDecoration(
-                            color: redColor,
+                            color: redColor.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             map['message'],
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: MediaQuery.of(context).size.width * 0.01),
-                        child: Text(DateFormat('hh:mm a').format(
-                            DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(map['time'])))),
+                        child: Text(
+                          convertToAgo(DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(map['time']))),
+                          style: const TextStyle(
+                              fontSize: 14, color: Color(0xFF8F908F)),
+                        ),
                       ),
                     ],
                   ),
@@ -272,7 +273,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         constraints: BoxConstraints(
                             maxWidth: MediaQuery.of(context).size.width * 0.55),
                         decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.3),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -284,9 +285,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: MediaQuery.of(context).size.width * 0.01),
-                        child: Text(DateFormat('hh:mm a').format(
-                            DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(map['time'])))),
+                        child: Text(
+                          convertToAgo(DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(map['time']))),
+                          style: const TextStyle(
+                              fontSize: 8, color: Color(0xFF8F908F)),
+                        ),
                       )
                     ],
                   ),
@@ -397,6 +401,15 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       }
     }
+
+    FirebaseFirestore.instance
+        .collection("lastMessage")
+        .doc(chatRoomid.toString())
+        .set({
+      "lastMsg": lastMessage,
+      "time": DateTime.now().millisecondsSinceEpoch.toString()
+    });
+
     int count = 0;
     try {
       var ids = await FirebaseFirestore.instance
@@ -423,19 +436,45 @@ class _ChatScreenState extends State<ChatScreen> {
           .doc(widget.id.toString())
           .set({"count": count});
     }
-    FirebaseFirestore.instance
-        .collection("lastMessage")
-        .doc(chatRoomid.toString())
-        .set({
-      "lastMsg": lastMessage,
-      "time": DateTime.now().millisecondsSinceEpoch.toString()
-    });
   }
 
-  chatRoomId(var user1, var user2) {
-    if (user1 != null) {
-      chatRoomid = '$user2-$user1';
-      return chatRoomid;
-    }
+  String chatRoomId(var user1, var user2) {
+    chatRoomid = '$user1-$user2';
+    return chatRoomid;
+  }
+
+  status() {
+    FirebaseFirestore.instance
+        .collection("Status")
+        .doc(chatRoomid)
+        .collection("id")
+        .doc("123")
+        .set({"count": 0});
+    FirebaseFirestore.instance
+        .collection("Status")
+        .doc(chatRoomid)
+        .collection("id")
+        .doc(widget.id.toString())
+        .set({"count": 0});
+  }
+}
+
+String convertToAgo(DateTime input) {
+  Duration diff = DateTime.now().difference(input);
+
+  if (diff.inDays > 365) {
+    return '${diff.inDays} ${"Years ago"}';
+  } else if (diff.inDays >= 30 && diff.inDays < 365) {
+    return '${diff.inDays} ${"Months ago"}';
+  } else if (diff.inDays >= 1) {
+    return '${diff.inDays} ${"Days ago"}';
+  } else if (diff.inHours >= 1) {
+    return '${diff.inHours} ${"hours ago"}';
+  } else if (diff.inMinutes >= 1) {
+    return '${diff.inMinutes} ${"minutes ago"}';
+  } else if (diff.inSeconds >= 1) {
+    return '${diff.inSeconds} ${"seconds ago"}';
+  } else {
+    return 'just now';
   }
 }
