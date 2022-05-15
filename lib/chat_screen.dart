@@ -18,11 +18,18 @@ class _ChatScreenState extends State<ChatScreen> {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   var chatRoomid;
   final TextEditingController chatController = TextEditingController();
-
+  getCounterZero() async {
+    await FirebaseFirestore.instance
+        .collection("badge")
+        .doc(chatRoomId(widget.id.toString(), "123"))
+        .collection("id")
+        .doc("123")
+        .set({"count": 0});
+  }
   @override
   void initState() {
     if (widget.id != null || widget.id != "") {
-      Timer.periodic(const Duration(seconds: 1), (timer) async {});
+
     }
     Timer(const Duration(seconds: 1), () {
       setState(() {});
@@ -390,7 +397,32 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       }
     }
+    int count = 0;
+    try {
+      var ids = await FirebaseFirestore.instance
+          .collection("badge")
+          .doc(chatRoomid.toString())
+          .collection("id")
+          .doc(widget.id.toString())
+          .get();
 
+      count = ids["count"];
+      count += 1;
+      await FirebaseFirestore.instance
+          .collection("badge")
+          .doc(chatRoomid.toString())
+          .collection("id")
+          .doc(widget.id.toString())
+          .set({"count": count});
+    } on StateError catch (e) {
+      count += 1;
+      await FirebaseFirestore.instance
+          .collection("badge")
+          .doc(chatRoomid.toString())
+          .collection("id")
+          .doc(widget.id.toString())
+          .set({"count": count});
+    }
     FirebaseFirestore.instance
         .collection("lastMessage")
         .doc(chatRoomid.toString())
