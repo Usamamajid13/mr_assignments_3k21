@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>784591583451-rklbed3k7jograbaqeicm1hb24t91fab.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.784591583451-rklbed3k7jograbaqeicm1hb24t91fab</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>784591583451-2f60ven1uja93upkq0tbo59q35ig4pkf.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCv10uaUQsH8ycD9FtC8GtAl3z0L_fVtU8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>784591583451</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.mrAssignments3k21</string>
+	<key>PROJECT_ID</key>
+	<string>mrassignments3k21-b5075</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mrassignments3k21-b5075.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:784591583451:ios:9238bd23b658f89759f4fe</string>
+	<key>DATABASE_URL</key>
+	<string>https://mrassignments3k21-b5075-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
