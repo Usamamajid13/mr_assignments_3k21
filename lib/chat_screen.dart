@@ -80,7 +80,8 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: IconButton(
                                 icon: const Icon(Icons.arrow_back),
                                 onPressed: () {
-                                  final GoogleSignIn googleSignIn = GoogleSignIn();
+                                  final GoogleSignIn googleSignIn =
+                                      GoogleSignIn();
                                   googleSignIn.disconnect();
                                   Navigator.pop(context);
                                   Navigator.pop(context);
