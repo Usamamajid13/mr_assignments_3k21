@@ -89,6 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           const SizedBox(
                             width: 20,
                           ),
+                          //hello
                           Expanded(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
