@@ -19,8 +19,6 @@ class _ChatScreenState extends State<ChatScreen> {
   var chatRoomid;
   final TextEditingController chatController = TextEditingController();
 
-  Timer timer = Timer(const Duration(seconds: 0), () {});
-
   @override
   void initState() {
     super.initState();
@@ -47,7 +45,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     super.dispose();
-    timer.cancel();
   }
 
   @override
@@ -62,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Container(
                   width: constraints.maxWidth,
-                  height: constraints.maxHeight * 0.15,
+                  height: constraints.maxHeight * 0.25,
                   decoration: const BoxDecoration(
                     color: blueColor,
                   ),
@@ -103,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       Text(
                                         "Quick Chat",
                                         style: TextStyle(
-                                            fontSize: 26, color: Colors.white),
+                                            fontSize: 22, color: Colors.white),
                                       )
                                     ],
                                   ),
@@ -316,8 +313,8 @@ class _ChatScreenState extends State<ChatScreen> {
       var idsList = await _fireStore
           .collection("ChatIds")
           .doc("ids")
-          .collection(widget.id.toString())
-          .doc(widget.id.toString())
+          .collection("123")
+          .doc("123")
           .get();
 
       var friendIdsList = await _fireStore
