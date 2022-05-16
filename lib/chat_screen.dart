@@ -339,8 +339,8 @@ class _ChatScreenState extends State<ChatScreen> {
           await _fireStore
               .collection("ChatIds")
               .doc("ids")
-              .collection(widget.id.toString())
-              .doc(widget.id.toString())
+              .collection("123")
+              .doc("123")
               .set({
             "list": list,
           });
