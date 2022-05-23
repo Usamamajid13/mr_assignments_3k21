@@ -38,6 +38,57 @@
             {
               "client_id": "784591583451-indd6cfhiv5q6uk942gbhvp8jnfgkja1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "784591583451-rklbed3k7jograbaqeicm1hb24t91fab.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mrAssignments3k21"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784591583451:android:2582c977fe4c834059f4fe",
+        "android_client_info": {
+          "package_name": "com.jack.mr21app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784591583451-st2eojsb0qmcl06m7cfvdhjp9i2h2sun.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jack.mr21app",
+            "certificate_hash": "723ff6ce4da77dd7e73ab61fd8397e19ca84287f"
+          }
+        },
+        {
+          "client_id": "784591583451-indd6cfhiv5q6uk942gbhvp8jnfgkja1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB39wuBkqVv-G4M_m-JMX_k6oeoHrPoJag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784591583451-indd6cfhiv5q6uk942gbhvp8jnfgkja1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "784591583451-rklbed3k7jograbaqeicm1hb24t91fab.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mrAssignments3k21"
+              }
             }
           ]
         }

@@ -8,7 +8,7 @@ import 'constants.dart';
 class ChatScreen extends StatefulWidget {
   var id;
 
-  ChatScreen(this.id);
+  ChatScreen(this.id, {Key? key}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -244,7 +244,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             map['message'],
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 20),
                           ),
                         ),
                       ),

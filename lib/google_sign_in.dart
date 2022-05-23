@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mr_assignments_3k21/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
   const GoogleSignInScreen({Key? key}) : super(key: key);
